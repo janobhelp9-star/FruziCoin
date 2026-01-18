@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruzi Coin Pro</title>
+    <title>Fruzi Coin Final</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --gold: #ffd700;
-            --gold-dark: #cba600;
-            --bg-dark: #111;
-            --bg-darker: #000;
-            --nav-bg: rgba(30, 30, 30, 0.8);
+            --gold-dark: #daa520;
+            --bg-color: #000000;
+            --card-bg: #1c1c1e;
+            --text-color: #ffffff;
+            --accent: #007aff;
         }
 
         body {
-            background-color: var(--bg-darker);
-            color: white;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            overflow: hidden;
+            padding: 0;
+            overflow: hidden; /* Ekranni qotirish */
             user-select: none;
             -webkit-tap-highlight-color: transparent;
             height: 100vh;
@@ -27,382 +29,440 @@
             flex-direction: column;
         }
 
-        /* --- PAGES & NAVIGATION --- */
+        /* --- SAHIFALAR --- */
         .page {
-            display: none; /* Hidden by default */
+            display: none;
             flex-direction: column;
-            height: calc(100vh - 70px); /* Space for bottom nav */
-            overflow-y: auto;
-            padding: 20px;
+            height: 100%;
+            width: 100%;
+            overflow-y: auto; /* Agar sig'masa scroll bo'ladi */
+            padding: 20px 20px 100px 20px; /* Pastdan 100px joy qoldiramiz (Menu uchun) */
             box-sizing: border-box;
             align-items: center;
         }
 
         .page.active {
-            display: flex; /* Only active page is shown */
+            display: flex;
         }
 
+        /* --- MENU (PASTKI) --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 70px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(10px);
+            height: 75px;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(20px);
             display: flex;
             justify-content: space-around;
             align-items: center;
             border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 100;
+            z-index: 1000;
+            padding-bottom: 10px; /* iPhone pastki chizig'i uchun */
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #888;
-            font-size: 12px;
+            color: #666;
+            font-size: 11px;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: all 0.2s;
+            width: 20%;
         }
 
         .nav-item.active {
             color: var(--gold);
+            transform: translateY(-2px);
         }
 
         .nav-icon {
-            font-size: 24px;
+            font-size: 26px;
             margin-bottom: 4px;
         }
 
-        /* --- HOME PAGE STYLES --- */
-        .score-container {
-            margin-top: 30px;
-            text-align: center;
-        }
-        #score {
-            font-size: 48px;
-            font-weight: 800;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        /* --- HOME PAGE (O'YIN) --- */
+        /* Eng muhim joy: Tanga va Yozuvlar bir-biriga kirib ketmasligi uchun */
+        .home-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between; /* Tepaga va pastga yoyish */
+            height: 100%;
+            width: 100%;
         }
 
-        .coin-container {
-            flex-grow: 1;
+        .balance-box {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: #888;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        #score {
+            font-size: 52px;
+            font-weight: 800;
+            font-family: sans-serif;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .coin-wrapper {
+            flex-grow: 1; /* Bo'sh joyni egallash */
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
         }
 
-        /* PREMIUM CSS COIN */
         .coin {
-            width: 280px;
-            height: 280px;
+            /* Tanga telefonga qarab o'zi kichrayib-kattaradi */
+            width: 70vw; 
+            height: 70vw;
+            max-width: 300px;
+            max-height: 300px;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, var(--gold), var(--gold-dark));
-            box-shadow: 0 0 60px rgba(255, 165, 0, 0.3), inset -5px -5px 15px rgba(0,0,0,0.3);
+            background: radial-gradient(circle at 30% 30%, #ffd700, #ffaa00);
+            box-shadow: 
+                0 0 60px rgba(255, 165, 0, 0.4),
+                inset -10px -10px 30px rgba(0,0,0,0.3),
+                inset 5px 5px 20px rgba(255,255,255,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border: 10px solid var(--gold-dark);
+            border: 8px solid #b8860b;
             position: relative;
-            transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.08s;
+            -webkit-tap-highlight-color: transparent;
         }
-        .coin:active { transform: scale(0.93); }
-        .coin-text {
-            font-size: 50px;
+
+        .coin:active {
+            transform: scale(0.95);
+        }
+
+        .coin-logo {
+            font-size: 55px;
             font-weight: 900;
-            color: #5c4300;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
-            font-family: 'Georgia', serif; letter-spacing: 2px;
+            color: #7a5c00;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+            font-family: serif;
+            letter-spacing: 2px;
         }
 
-        .energy-container {
+        .energy-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
+            padding: 10px 25px;
+            border-radius: 50px;
             margin-bottom: 20px;
-            display: flex; align-items: center; gap: 10px;
+            font-weight: bold;
+            font-size: 18px;
         }
 
-        /* --- ANIMATIONS --- */
+        /* --- ANIMATSIYA (+1) --- */
         .float-text {
             position: absolute;
-            color: var(--gold);
+            color: white;
             font-weight: bold;
-            font-size: 32px;
+            font-size: 36px;
             pointer-events: none;
             animation: floatUp 1s ease-out forwards;
-            z-index: 50;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            z-index: 999;
+            text-shadow: 0 0 5px #000;
         }
-        @keyframes floatUp { to { transform: translateY(-100px); opacity: 0; } }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-150px) scale(1.2); opacity: 0; }
+        }
 
-        /* --- OTHER PAGES STYLES --- */
-        h2 { color: var(--gold); margin-bottom: 20px; }
+        /* --- BOShQA SAHIFALAR DIZAYNI --- */
+        h2 { color: var(--gold); margin-bottom: 20px; font-size: 28px; }
+        
         .list-item {
-            background: rgba(255,255,255,0.08);
-            width: 90%;
+            background: var(--card-bg);
+            width: 100%;
             padding: 15px;
             margin-bottom: 12px;
-            border-radius: 15px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid #333;
         }
-        .item-info { display: flex; flex-direction: column; align-items: flex-start; }
-        .item-title { font-weight: bold; font-size: 16px; }
-        .item-desc { font-size: 12px; color: #aaa; margin-top: 5px; }
-        .btn {
-            background: var(--gold); color: black;
-            border: none; padding: 8px 16px;
-            border-radius: 10px; font-weight: bold;
-            cursor: pointer; font-size: 14px;
+
+        .item-left { display: flex; align-items: center; gap: 15px; }
+        .icon-box { width: 40px; height: 40px; background: #333; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .item-info { display: flex; flex-direction: column; }
+        .item-title { font-weight: bold; font-size: 16px; margin-bottom: 3px; }
+        .item-desc { font-size: 12px; color: #888; }
+        
+        .btn-action {
+            background: var(--gold);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
         }
-        .btn:disabled { background: #555; color: #888; cursor: not-allowed; }
-        .btn-claim { background: #4CAF50; color: white; }
+        .btn-action:disabled { background: #444; color: #888; }
 
     </style>
 </head>
 <body>
 
     <div class="page active" id="homePage">
-        <div class="score-container">
-            <div style="color:#888; font-size:14px;">YOUR BALANCE</div>
-            <div id="score">0</div>
-        </div>
-        
-        <div class="coin-container">
-            <div class="coin" id="coinBtn">
-                <div class="coin-text">FRUZI</div>
+        <div class="home-content">
+            <div class="balance-box">
+                <div class="balance-label">YOUR BALANCE</div>
+                <div id="score">0</div>
             </div>
-        </div>
+            
+            <div class="coin-wrapper">
+                <div class="coin" id="coinBtn">
+                    <div class="coin-logo">FRUZI</div>
+                </div>
+            </div>
 
-        <div class="energy-container">
-            ⚡ <span id="energyVal">1000</span> / <span id="energyMaxVal">1000</span>
+            <div class="energy-box">
+                ⚡ <span id="energyVal">1000</span> / <span id="energyMaxVal">1000</span>
+            </div>
         </div>
     </div>
 
     <div class="page" id="boostPage">
         <h2>🚀 Boosters</h2>
+        
         <div class="list-item">
-            <div class="item-info">
-                <span class="item-title">👆 Multitap</span>
-                <span class="item-desc">Get more coins per tap. Level: <span id="multiLvl">1</span></span>
+            <div class="item-left">
+                <div class="icon-box">👆</div>
+                <div class="item-info">
+                    <span class="item-title">Multitap</span>
+                    <span class="item-desc">Level <span id="multiLvl">1</span> • +1 per tap</span>
+                </div>
             </div>
-            <button class="btn" id="buyMultiBtn">
+            <button class="btn-action" id="buyMultiBtn">
                 Upgrade (<span id="multiCost">100</span>)
             </button>
         </div>
+
         <div class="list-item">
-            <div class="item-info">
-                <span class="item-title">🔋 Energy Limit</span>
-                <span class="item-desc">Increase max energy. Level: <span id="energyLvl">1</span></span>
+            <div class="item-left">
+                <div class="icon-box">🔋</div>
+                <div class="item-info">
+                    <span class="item-title">Energy Limit</span>
+                    <span class="item-desc">Level <span id="energyLvl">1</span> • +500 limit</span>
+                </div>
             </div>
-            <button class="btn" id="buyEnergyBtn">
+            <button class="btn-action" id="buyEnergyBtn">
                 Upgrade (<span id="energyCost">100</span>)
             </button>
         </div>
     </div>
 
     <div class="page" id="tasksPage">
-        <h2>📋 Special Tasks</h2>
-        <p style="color:#aaa; font-size:13px; text-align:center;">Complete tasks to earn huge rewards!</p>
+        <h2>📋 Tasks</h2>
         
         <div class="list-item">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:24px; color:red;">▶️</span>
+            <div class="item-left">
+                <div class="icon-box" style="color:red">▶️</div>
                 <div class="item-info">
                     <span class="item-title">Subscribe to YouTube</span>
                     <span class="item-desc">+10,000 Coins</span>
                 </div>
             </div>
-            <button class="btn" id="taskYoutubeBtn" onclick="startTask('youtube', 10000, 'https://youtube.com')">Start</button>
+            <button class="btn-action" id="taskYoutubeBtn" onclick="doTask('youtube', 10000, 'https://youtube.com')">Start</button>
         </div>
 
         <div class="list-item">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:24px; color:#0088cc;">✈️</span>
+            <div class="item-left">
+                <div class="icon-box" style="color:#0088cc">✈️</div>
                 <div class="item-info">
-                    <span class="item-title">Join Telegram Channel</span>
+                    <span class="item-title">Join Telegram</span>
                     <span class="item-desc">+5,000 Coins</span>
                 </div>
             </div>
-            <button class="btn" id="taskTelegramBtn" onclick="startTask('telegram', 5000, 'https://t.me/telegram')">Start</button>
+            <button class="btn-action" id="taskTelegramBtn" onclick="doTask('telegram', 5000, 'https://telegram.org')">Start</button>
         </div>
     </div>
 
     <div class="page" id="friendsPage">
-        <h2>👥 Invite Friends</h2>
-        <div style="text-align:center; padding:20px; background:rgba(255,215,0,0.1); border-radius:20px; width:90%;">
-            <span style="font-size:40px;">🎁</span>
-            <h3>Invite & Earn</h3>
-            <p style="color:#aaa;">Get +500 coins for each friend!</p>
-            <button class="btn" style="width:100%; padding:15px; font-size:16px;" id="inviteBtn">
-                Copy Invite Link 🔗
-            </button>
+        <h2>👥 Friends</h2>
+        <div style="text-align:center; margin-top:30px; padding:30px; background:#1c1c1e; border-radius:20px; border:1px solid #333;">
+            <div style="font-size:50px; margin-bottom:15px;">🎁</div>
+            <h3 style="margin:0 0 10px 0;">Invite Friends</h3>
+            <p style="color:#888; font-size:14px; margin-bottom:20px;">Earn +500 coins for each friend you invite.</p>
+            <button class="btn-action" style="width:100%; padding:15px;" id="inviteBtn">Copy Invite Link 🔗</button>
         </div>
     </div>
 
     <div class="page" id="topPage">
         <h2>🏆 Leaderboard</h2>
-        <div class="list-item" style="background:linear-gradient(45deg, #ffd700, #ffaa00); color:black;">
-            <span style="font-weight:bold;">#1🥇 Elon Musk</span>
-            <span style="font-weight:bold;">999,999,999</span>
+        <div class="list-item" style="background:linear-gradient(90deg, #ffd700, #b8860b); color:black; border:none;">
+            <div class="item-left">
+                <div class="icon-box" style="background:rgba(0,0,0,0.2); color:white;">1</div>
+                <span class="item-title">Elon Musk</span>
+            </div>
+            <span style="font-weight:bold;">999M</span>
         </div>
         <div class="list-item">
-            <span>#2🥈 Pavel Durov</span>
-            <span>500,000,000</span>
+            <div class="item-left">
+                <div class="icon-box">2</div>
+                <span class="item-title">Pavel Durov</span>
+            </div>
+            <span>500M</span>
         </div>
-         <div class="list-item">
-            <span>#3🥉 MrBeast</span>
-            <span>100,000,000</span>
+        <div class="list-item">
+            <div class="item-left">
+                <div class="icon-box">3</div>
+                <span class="item-title">MrBeast</span>
+            </div>
+            <span>100M</span>
         </div>
-        <div class="list-item" style="border: 1px solid var(--gold);">
-            <span>#99 You</span>
+         <div class="list-item" style="border:1px solid var(--gold)">
+            <div class="item-left">
+                <div class="icon-box">99</div>
+                <span class="item-title">You</span>
+            </div>
             <span id="myTopScore">0</span>
         </div>
     </div>
 
-
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="showPage('homePage', this)">
+        <div class="nav-item active" onclick="openPage('homePage', this)">
             <span class="nav-icon">🏠</span>
             <span>Home</span>
         </div>
-        <div class="nav-item" onclick="showPage('boostPage', this)">
+        <div class="nav-item" onclick="openPage('boostPage', this)">
             <span class="nav-icon">🚀</span>
             <span>Boost</span>
         </div>
-        <div class="nav-item" onclick="showPage('tasksPage', this)">
+        <div class="nav-item" onclick="openPage('tasksPage', this)">
             <span class="nav-icon">📋</span>
             <span>Tasks</span>
         </div>
-        <div class="nav-item" onclick="showPage('friendsPage', this)">
+        <div class="nav-item" onclick="openPage('friendsPage', this)">
             <span class="nav-icon">👥</span>
             <span>Friends</span>
         </div>
-        <div class="nav-item" onclick="showPage('topPage', this)">
+        <div class="nav-item" onclick="openPage('topPage', this)">
             <span class="nav-icon">🏆</span>
             <span>Top</span>
         </div>
     </nav>
 
-
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const userId = tg.initDataUnsafe?.user?.id || 'test_user';
+        // User ID (yagona saqlash uchun)
+        const userId = tg.initDataUnsafe?.user?.id || 'user_local';
 
-        // --- STATE & STORAGE KEYS ---
-        const K = {
-            score: `f_score_${userId}`,
-            multi: `f_multi_${userId}`,
-            energyMax: `f_emax_${userId}`,
-            energyVal: `f_eval_${userId}`,
-            energyTime: `f_etime_${userId}`,
-            tasks: `f_tasks_${userId}` // Vazifalar bajarilganini saqlash uchun
-        };
+        // --- MA'LUMOTLARNI YUKLASH ---
+        let score = Number(localStorage.getItem(`score_${userId}`)) || 0;
+        let multitap = Number(localStorage.getItem(`multi_${userId}`)) || 1;
+        let energyMax = Number(localStorage.getItem(`emax_${userId}`)) || 1000;
+        let energy = 1000;
+        
+        // Energiya hisobi (vaqt bo'yicha)
+        let lastTime = Number(localStorage.getItem(`etime_${userId}`)) || Date.now();
+        let savedEnergy = localStorage.getItem(`eval_${userId}`);
+        if(savedEnergy !== null) {
+            let passedSeconds = Math.floor((Date.now() - lastTime) / 1000);
+            energy = Math.min(energyMax, Number(savedEnergy) + passedSeconds);
+        }
 
-        let state = {
-            score: Number(localStorage.getItem(K.score)) || 0,
-            multitap: Number(localStorage.getItem(K.multi)) || 1,
-            energyMax: Number(localStorage.getItem(K.energyMax)) || 1000,
-            energy: 1000,
-            completedTasks: JSON.parse(localStorage.getItem(K.tasks)) || {}
-        };
+        // Vazifalar holati
+        let tasks = JSON.parse(localStorage.getItem(`tasks_${userId}`)) || {};
 
-        // Energiya hisoblash
-        let lastTime = Number(localStorage.getItem(K.energyTime)) || Date.now();
-        let savedEnergy = Number(localStorage.getItem(K.energyVal));
-        if(isNaN(savedEnergy)) savedEnergy = state.energyMax;
-        let passed = Math.floor((Date.now() - lastTime) / 1000);
-        state.energy = Math.min(state.energyMax, savedEnergy + passed);
-
-
-        // --- ELEMENTS ---
+        // Elementlar
         const els = {
             score: document.getElementById('score'),
-            energyVal: document.getElementById('energyVal'),
-            energyMaxVal: document.getElementById('energyMaxVal'),
-            coinBtn: document.getElementById('coinBtn'),
-            multiCost: document.getElementById('multiCost'),
-            multiLvl: document.getElementById('multiLvl'),
-            energyCost: document.getElementById('energyCost'),
-            energyLvl: document.getElementById('energyLvl'),
-            myTopScore: document.getElementById('myTopScore')
+            energy: document.getElementById('energyVal'),
+            emax: document.getElementById('energyMaxVal'),
+            myTop: document.getElementById('myTopScore'),
+            mCost: document.getElementById('multiCost'),
+            mLvl: document.getElementById('multiLvl'),
+            eCost: document.getElementById('energyCost'),
+            eLvl: document.getElementById('energyLvl')
         };
 
-        // --- CORE FUNCTIONS ---
+        // --- FUNKSIYALAR ---
         function save() {
-            localStorage.setItem(K.score, state.score);
-            localStorage.setItem(K.multi, state.multitap);
-            localStorage.setItem(K.energyMax, state.energyMax);
-            localStorage.setItem(K.energyVal, state.energy);
-            localStorage.setItem(K.energyTime, Date.now());
-            localStorage.setItem(K.tasks, JSON.stringify(state.completedTasks));
+            localStorage.setItem(`score_${userId}`, score);
+            localStorage.setItem(`multi_${userId}`, multitap);
+            localStorage.setItem(`emax_${userId}`, energyMax);
+            localStorage.setItem(`eval_${userId}`, energy);
+            localStorage.setItem(`etime_${userId}`, Date.now());
+            localStorage.setItem(`tasks_${userId}`, JSON.stringify(tasks));
         }
 
         function updateUI() {
-            els.score.innerText = state.score.toLocaleString();
-            els.energyVal.innerText = Math.floor(state.energy);
-            els.energyMaxVal.innerText = state.energyMax;
-            els.myTopScore.innerText = state.score.toLocaleString();
+            els.score.innerText = score.toLocaleString();
+            els.energy.innerText = Math.floor(energy);
+            els.emax.innerText = energyMax;
+            els.myTop.innerText = score.toLocaleString();
+            
+            // Boost narxlari
+            els.mCost.innerText = multitap * 100;
+            els.mLvl.innerText = multitap;
+            els.eCost.innerText = (energyMax/500) * 100;
+            els.eLvl.innerText = energyMax/500;
 
-            // Boost Narxlari
-            els.multiCost.innerText = state.multitap * 100;
-            els.multiLvl.innerText = state.multitap;
-            els.energyCost.innerText = (state.energyMax/500) * 100;
-            els.energyLvl.innerText = state.energyMax/500;
-
-            // Vazifalar tugmalari holatini yangilash
-            checkTaskStatus('youtube', 'taskYoutubeBtn');
-            checkTaskStatus('telegram', 'taskTelegramBtn');
+            // Vazifa tugmalari tekshiruvi
+            if(tasks['youtube']) disableTaskBtn('taskYoutubeBtn');
+            if(tasks['telegram']) disableTaskBtn('taskTelegramBtn');
         }
 
-        // --- NAVIGATION LOGIC ---
-        function showPage(pageId, navBtn) {
-            // Hamma sahifalarni yashirish
+        // --- SAHIFA ALMASHISH ---
+        window.openPage = function(pageId, btn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Tanlangan sahifani ko'rsatish
             document.getElementById(pageId).classList.add('active');
             
-            // Menyu tugmalari rangini o'zgartirish
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            navBtn.classList.add('active');
+            btn.classList.add('active');
             tg.HapticFeedback.selectionChanged();
         }
 
-        // --- GAMEPLAY ---
-        els.coinBtn.addEventListener('touchstart', handleTap, {passive: false});
-        els.coinBtn.addEventListener('click', handleTap);
+        // --- O'YIN (Tanga Bosish) ---
+        const coinBtn = document.getElementById('coinBtn');
+        
+        // Multi-touch qo'llab-quvvatlash
+        coinBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            for (let i = 0; i < e.touches.length; i++) {
+                tap(e.touches[i].clientX, e.touches[i].clientY);
+            }
+        }, {passive: false});
 
-        function handleTap(e) {
-            if(e.type === 'touchstart') e.preventDefault();
-            
-            if(state.energy >= state.multitap) {
-                let touches = e.touches ? e.touches.length : 1;
-                for(let i=0; i<touches; i++) {
-                     if(state.energy < state.multitap) break;
-                     state.score += state.multitap;
-                     state.energy -= state.multitap;
-                     
-                     // Animatsiya nuqtasi
-                     let x = e.touches ? e.touches[i].clientX : e.clientX;
-                     let y = e.touches ? e.touches[i].clientY : e.clientY;
-                     showFloatText(x, y, '+' + state.multitap);
-                }
+        coinBtn.addEventListener('click', (e) => {
+            tap(e.clientX, e.clientY);
+        });
+
+        function tap(x, y) {
+            if (energy >= multitap) {
+                score += multitap;
+                energy -= multitap;
                 save();
                 updateUI();
+                
+                // +1 animatsiyasi
+                showFloat(x, y, '+' + multitap);
                 tg.HapticFeedback.impactOccurred('medium');
             }
         }
 
-        function showFloatText(x, y, text) {
-            const el = document.createElement('div');
+        function showFloat(x, y, text) {
+            let el = document.createElement('div');
             el.className = 'float-text';
             el.innerText = text;
             el.style.left = (x - 20) + 'px';
@@ -413,574 +473,68 @@
 
         // --- BOOSTERS ---
         document.getElementById('buyMultiBtn').addEventListener('click', () => {
-            let cost = state.multitap * 100;
-            if(state.score >= cost) {
-                state.score -= cost;
-                state.multitap++;
-                performUpgrade();
-            }
-        });
-        document.getElementById('buyEnergyBtn').addEventListener('click', () => {
-            let cost = (state.energyMax/500) * 100;
-            if(state.score >= cost) {
-                state.score -= cost;
-                state.energyMax += 500;
-                performUpgrade();
-            }
-        });
-        function performUpgrade() {
-            save(); updateUI();
-            tg.HapticFeedback.notificationOccurred('success');
-            alert("Upgrade Successful! 🚀");
-        }
-
-        // --- TASKS SYSTEM (SIMULATION) ---
-        function startTask(taskId, reward, url) {
-            if(state.completedTasks[taskId]) return; // Bajarilgan bo'lsa qaytish
-
-            const btn = document.getElementById('task'+taskId.charAt(0).toUpperCase()+taskId.slice(1)+'Btn');
-            
-            // 1. Linkni ochish
-            window.open(url, '_blank');
-            tg.HapticFeedback.selectionChanged();
-            
-            // 2. Tugmani o'zgartirish
-            btn.innerText = "Checking... (Wait 5s)";
-            btn.disabled = true;
-            
-            // 3. 5 soniyadan keyin mukofotni berish (Simulyatsiya)
-            setTimeout(() => {
-                state.score += reward;
-                state.completedTasks[taskId] = true; // Bajarildi deb belgilash
-                save();
-                updateUI();
+            let cost = multitap * 100;
+            if(score >= cost) {
+                score -= cost;
+                multitap++;
+                save(); updateUI();
                 tg.HapticFeedback.notificationOccurred('success');
-                alert(`Task Complete! +${reward.toLocaleString()} Coins! 🎉`);
-            }, 5000);
-        }
-
-        function checkTaskStatus(taskId, btnId) {
-            const btn = document.getElementById(btnId);
-            if(state.completedTasks[taskId]) {
-                btn.innerText = "Completed ✅";
-                btn.disabled = true;
-                btn.style.background = "#333";
-                btn.style.color = "#888";
             }
-        }
-
-        // --- INVITE LINK ---
-        document.getElementById('inviteBtn').addEventListener('click', () => {
-            const link = `https://t.me/Fruzi_original_bot?start=ref_${userId}`;
-            navigator.clipboard.writeText(link);
-            alert("Invite link copied! Send it to friends.");
-            tg.HapticFeedback.notificationOccurred('success');
         });
 
-        // --- ENERGY REGEN LOOP ---
+        document.getElementById('buyEnergyBtn').addEventListener('click', () => {
+            let cost = (energyMax/500) * 100;
+            if(score >= cost) {
+                score -= cost;
+                energyMax += 500;
+                save(); updateUI();
+                tg.HapticFeedback.notificationOccurred('success');
+            }
+        });
+
+        // --- TASKS ---
+        window.doTask = function(key, reward, url) {
+            if(tasks[key]) return;
+            
+            window.open(url, '_blank');
+            let btn = key === 'youtube' ? document.getElementById('taskYoutubeBtn') : document.getElementById('taskTelegramBtn');
+            btn.innerText = "Checking...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                score += reward;
+                tasks[key] = true;
+                save(); updateUI();
+                tg.HapticFeedback.notificationOccurred('success');
+                alert(`Task Complete! +${reward} coins`);
+                disableTaskBtn(btn.id);
+            }, 5000); // 5 sekunddan keyin beradi
+        };
+
+        function disableTaskBtn(id) {
+            let btn = document.getElementById(id);
+            btn.innerText = "Done ✅";
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+        }
+
+        // --- INVITE ---
+        document.getElementById('inviteBtn').addEventListener('click', () => {
+            let link = `https://t.me/Fruzi_original_bot?start=ref_${userId}`;
+            navigator.clipboard.writeText(link);
+            alert("Copied: " + link);
+        });
+
+        // --- ENERGIYA TIKLANISHI ---
         setInterval(() => {
-            if(state.energy < state.energyMax) {
-                state.energy += 1;
+            if(energy < energyMax) {
+                energy += 1;
                 save();
                 updateUI();
             }
         }, 1000);
 
-        // START
-        updateUI();
-
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruzi Coin Pro</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --gold: #ffd700;
-            --gold-dark: #cba600;
-            --bg-dark: #111;
-            --bg-darker: #000;
-            --nav-bg: rgba(30, 30, 30, 0.8);
-        }
-
-        body {
-            background-color: var(--bg-darker);
-            color: white;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            overflow: hidden;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- PAGES & NAVIGATION --- */
-        .page {
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            height: calc(100vh - 70px); /* Space for bottom nav */
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
-            align-items: center;
-        }
-
-        .page.active {
-            display: flex; /* Only active page is shown */
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 70px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #888;
-            font-size: 12px;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .nav-item.active {
-            color: var(--gold);
-        }
-
-        .nav-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-
-        /* --- HOME PAGE STYLES --- */
-        .score-container {
-            margin-top: 30px;
-            text-align: center;
-        }
-        #score {
-            font-size: 48px;
-            font-weight: 800;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-        }
-
-        .coin-container {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* PREMIUM CSS COIN */
-        .coin {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, var(--gold), var(--gold-dark));
-            box-shadow: 0 0 60px rgba(255, 165, 0, 0.3), inset -5px -5px 15px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 10px solid var(--gold-dark);
-            position: relative;
-            transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .coin:active { transform: scale(0.93); }
-        .coin-text {
-            font-size: 50px;
-            font-weight: 900;
-            color: #5c4300;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
-            font-family: 'Georgia', serif; letter-spacing: 2px;
-        }
-
-        .energy-container {
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            display: flex; align-items: center; gap: 10px;
-        }
-
-        /* --- ANIMATIONS --- */
-        .float-text {
-            position: absolute;
-            color: var(--gold);
-            font-weight: bold;
-            font-size: 32px;
-            pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
-            z-index: 50;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
-        }
-        @keyframes floatUp { to { transform: translateY(-100px); opacity: 0; } }
-
-        /* --- OTHER PAGES STYLES --- */
-        h2 { color: var(--gold); margin-bottom: 20px; }
-        .list-item {
-            background: rgba(255,255,255,0.08);
-            width: 90%;
-            padding: 15px;
-            margin-bottom: 12px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .item-info { display: flex; flex-direction: column; align-items: flex-start; }
-        .item-title { font-weight: bold; font-size: 16px; }
-        .item-desc { font-size: 12px; color: #aaa; margin-top: 5px; }
-        .btn {
-            background: var(--gold); color: black;
-            border: none; padding: 8px 16px;
-            border-radius: 10px; font-weight: bold;
-            cursor: pointer; font-size: 14px;
-        }
-        .btn:disabled { background: #555; color: #888; cursor: not-allowed; }
-        .btn-claim { background: #4CAF50; color: white; }
-
-    </style>
-</head>
-<body>
-
-    <div class="page active" id="homePage">
-        <div class="score-container">
-            <div style="color:#888; font-size:14px;">YOUR BALANCE</div>
-            <div id="score">0</div>
-        </div>
-        
-        <div class="coin-container">
-            <div class="coin" id="coinBtn">
-                <div class="coin-text">FRUZI</div>
-            </div>
-        </div>
-
-        <div class="energy-container">
-            ⚡ <span id="energyVal">1000</span> / <span id="energyMaxVal">1000</span>
-        </div>
-    </div>
-
-    <div class="page" id="boostPage">
-        <h2>🚀 Boosters</h2>
-        <div class="list-item">
-            <div class="item-info">
-                <span class="item-title">👆 Multitap</span>
-                <span class="item-desc">Get more coins per tap. Level: <span id="multiLvl">1</span></span>
-            </div>
-            <button class="btn" id="buyMultiBtn">
-                Upgrade (<span id="multiCost">100</span>)
-            </button>
-        </div>
-        <div class="list-item">
-            <div class="item-info">
-                <span class="item-title">🔋 Energy Limit</span>
-                <span class="item-desc">Increase max energy. Level: <span id="energyLvl">1</span></span>
-            </div>
-            <button class="btn" id="buyEnergyBtn">
-                Upgrade (<span id="energyCost">100</span>)
-            </button>
-        </div>
-    </div>
-
-    <div class="page" id="tasksPage">
-        <h2>📋 Special Tasks</h2>
-        <p style="color:#aaa; font-size:13px; text-align:center;">Complete tasks to earn huge rewards!</p>
-        
-        <div class="list-item">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:24px; color:red;">▶️</span>
-                <div class="item-info">
-                    <span class="item-title">Subscribe to YouTube</span>
-                    <span class="item-desc">+10,000 Coins</span>
-                </div>
-            </div>
-            <button class="btn" id="taskYoutubeBtn" onclick="startTask('youtube', 10000, 'https://youtube.com')">Start</button>
-        </div>
-
-        <div class="list-item">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="font-size:24px; color:#0088cc;">✈️</span>
-                <div class="item-info">
-                    <span class="item-title">Join Telegram Channel</span>
-                    <span class="item-desc">+5,000 Coins</span>
-                </div>
-            </div>
-            <button class="btn" id="taskTelegramBtn" onclick="startTask('telegram', 5000, 'https://t.me/telegram')">Start</button>
-        </div>
-    </div>
-
-    <div class="page" id="friendsPage">
-        <h2>👥 Invite Friends</h2>
-        <div style="text-align:center; padding:20px; background:rgba(255,215,0,0.1); border-radius:20px; width:90%;">
-            <span style="font-size:40px;">🎁</span>
-            <h3>Invite & Earn</h3>
-            <p style="color:#aaa;">Get +500 coins for each friend!</p>
-            <button class="btn" style="width:100%; padding:15px; font-size:16px;" id="inviteBtn">
-                Copy Invite Link 🔗
-            </button>
-        </div>
-    </div>
-
-    <div class="page" id="topPage">
-        <h2>🏆 Leaderboard</h2>
-        <div class="list-item" style="background:linear-gradient(45deg, #ffd700, #ffaa00); color:black;">
-            <span style="font-weight:bold;">#1🥇 Elon Musk</span>
-            <span style="font-weight:bold;">999,999,999</span>
-        </div>
-        <div class="list-item">
-            <span>#2🥈 Pavel Durov</span>
-            <span>500,000,000</span>
-        </div>
-         <div class="list-item">
-            <span>#3🥉 MrBeast</span>
-            <span>100,000,000</span>
-        </div>
-        <div class="list-item" style="border: 1px solid var(--gold);">
-            <span>#99 You</span>
-            <span id="myTopScore">0</span>
-        </div>
-    </div>
-
-
-    <nav class="bottom-nav">
-        <div class="nav-item active" onclick="showPage('homePage', this)">
-            <span class="nav-icon">🏠</span>
-            <span>Home</span>
-        </div>
-        <div class="nav-item" onclick="showPage('boostPage', this)">
-            <span class="nav-icon">🚀</span>
-            <span>Boost</span>
-        </div>
-        <div class="nav-item" onclick="showPage('tasksPage', this)">
-            <span class="nav-icon">📋</span>
-            <span>Tasks</span>
-        </div>
-        <div class="nav-item" onclick="showPage('friendsPage', this)">
-            <span class="nav-icon">👥</span>
-            <span>Friends</span>
-        </div>
-        <div class="nav-item" onclick="showPage('topPage', this)">
-            <span class="nav-icon">🏆</span>
-            <span>Top</span>
-        </div>
-    </nav>
-
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        const userId = tg.initDataUnsafe?.user?.id || 'test_user';
-
-        // --- STATE & STORAGE KEYS ---
-        const K = {
-            score: `f_score_${userId}`,
-            multi: `f_multi_${userId}`,
-            energyMax: `f_emax_${userId}`,
-            energyVal: `f_eval_${userId}`,
-            energyTime: `f_etime_${userId}`,
-            tasks: `f_tasks_${userId}` // Vazifalar bajarilganini saqlash uchun
-        };
-
-        let state = {
-            score: Number(localStorage.getItem(K.score)) || 0,
-            multitap: Number(localStorage.getItem(K.multi)) || 1,
-            energyMax: Number(localStorage.getItem(K.energyMax)) || 1000,
-            energy: 1000,
-            completedTasks: JSON.parse(localStorage.getItem(K.tasks)) || {}
-        };
-
-        // Energiya hisoblash
-        let lastTime = Number(localStorage.getItem(K.energyTime)) || Date.now();
-        let savedEnergy = Number(localStorage.getItem(K.energyVal));
-        if(isNaN(savedEnergy)) savedEnergy = state.energyMax;
-        let passed = Math.floor((Date.now() - lastTime) / 1000);
-        state.energy = Math.min(state.energyMax, savedEnergy + passed);
-
-
-        // --- ELEMENTS ---
-        const els = {
-            score: document.getElementById('score'),
-            energyVal: document.getElementById('energyVal'),
-            energyMaxVal: document.getElementById('energyMaxVal'),
-            coinBtn: document.getElementById('coinBtn'),
-            multiCost: document.getElementById('multiCost'),
-            multiLvl: document.getElementById('multiLvl'),
-            energyCost: document.getElementById('energyCost'),
-            energyLvl: document.getElementById('energyLvl'),
-            myTopScore: document.getElementById('myTopScore')
-        };
-
-        // --- CORE FUNCTIONS ---
-        function save() {
-            localStorage.setItem(K.score, state.score);
-            localStorage.setItem(K.multi, state.multitap);
-            localStorage.setItem(K.energyMax, state.energyMax);
-            localStorage.setItem(K.energyVal, state.energy);
-            localStorage.setItem(K.energyTime, Date.now());
-            localStorage.setItem(K.tasks, JSON.stringify(state.completedTasks));
-        }
-
-        function updateUI() {
-            els.score.innerText = state.score.toLocaleString();
-            els.energyVal.innerText = Math.floor(state.energy);
-            els.energyMaxVal.innerText = state.energyMax;
-            els.myTopScore.innerText = state.score.toLocaleString();
-
-            // Boost Narxlari
-            els.multiCost.innerText = state.multitap * 100;
-            els.multiLvl.innerText = state.multitap;
-            els.energyCost.innerText = (state.energyMax/500) * 100;
-            els.energyLvl.innerText = state.energyMax/500;
-
-            // Vazifalar tugmalari holatini yangilash
-            checkTaskStatus('youtube', 'taskYoutubeBtn');
-            checkTaskStatus('telegram', 'taskTelegramBtn');
-        }
-
-        // --- NAVIGATION LOGIC ---
-        function showPage(pageId, navBtn) {
-            // Hamma sahifalarni yashirish
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Tanlangan sahifani ko'rsatish
-            document.getElementById(pageId).classList.add('active');
-            
-            // Menyu tugmalari rangini o'zgartirish
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            navBtn.classList.add('active');
-            tg.HapticFeedback.selectionChanged();
-        }
-
-        // --- GAMEPLAY ---
-        els.coinBtn.addEventListener('touchstart', handleTap, {passive: false});
-        els.coinBtn.addEventListener('click', handleTap);
-
-        function handleTap(e) {
-            if(e.type === 'touchstart') e.preventDefault();
-            
-            if(state.energy >= state.multitap) {
-                let touches = e.touches ? e.touches.length : 1;
-                for(let i=0; i<touches; i++) {
-                     if(state.energy < state.multitap) break;
-                     state.score += state.multitap;
-                     state.energy -= state.multitap;
-                     
-                     // Animatsiya nuqtasi
-                     let x = e.touches ? e.touches[i].clientX : e.clientX;
-                     let y = e.touches ? e.touches[i].clientY : e.clientY;
-                     showFloatText(x, y, '+' + state.multitap);
-                }
-                save();
-                updateUI();
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-        }
-
-        function showFloatText(x, y, text) {
-            const el = document.createElement('div');
-            el.className = 'float-text';
-            el.innerText = text;
-            el.style.left = (x - 20) + 'px';
-            el.style.top = (y - 50) + 'px';
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 1000);
-        }
-
-        // --- BOOSTERS ---
-        document.getElementById('buyMultiBtn').addEventListener('click', () => {
-            let cost = state.multitap * 100;
-            if(state.score >= cost) {
-                state.score -= cost;
-                state.multitap++;
-                performUpgrade();
-            }
-        });
-        document.getElementById('buyEnergyBtn').addEventListener('click', () => {
-            let cost = (state.energyMax/500) * 100;
-            if(state.score >= cost) {
-                state.score -= cost;
-                state.energyMax += 500;
-                performUpgrade();
-            }
-        });
-        function performUpgrade() {
-            save(); updateUI();
-            tg.HapticFeedback.notificationOccurred('success');
-            alert("Upgrade Successful! 🚀");
-        }
-
-        // --- TASKS SYSTEM (SIMULATION) ---
-        function startTask(taskId, reward, url) {
-            if(state.completedTasks[taskId]) return; // Bajarilgan bo'lsa qaytish
-
-            const btn = document.getElementById('task'+taskId.charAt(0).toUpperCase()+taskId.slice(1)+'Btn');
-            
-            // 1. Linkni ochish
-            window.open(url, '_blank');
-            tg.HapticFeedback.selectionChanged();
-            
-            // 2. Tugmani o'zgartirish
-            btn.innerText = "Checking... (Wait 5s)";
-            btn.disabled = true;
-            
-            // 3. 5 soniyadan keyin mukofotni berish (Simulyatsiya)
-            setTimeout(() => {
-                state.score += reward;
-                state.completedTasks[taskId] = true; // Bajarildi deb belgilash
-                save();
-                updateUI();
-                tg.HapticFeedback.notificationOccurred('success');
-                alert(`Task Complete! +${reward.toLocaleString()} Coins! 🎉`);
-            }, 5000);
-        }
-
-        function checkTaskStatus(taskId, btnId) {
-            const btn = document.getElementById(btnId);
-            if(state.completedTasks[taskId]) {
-                btn.innerText = "Completed ✅";
-                btn.disabled = true;
-                btn.style.background = "#333";
-                btn.style.color = "#888";
-            }
-        }
-
-        // --- INVITE LINK ---
-        document.getElementById('inviteBtn').addEventListener('click', () => {
-            const link = `https://t.me/Fruzi_original_bot?start=ref_${userId}`;
-            navigator.clipboard.writeText(link);
-            alert("Invite link copied! Send it to friends.");
-            tg.HapticFeedback.notificationOccurred('success');
-        });
-
-        // --- ENERGY REGEN LOOP ---
-        setInterval(() => {
-            if(state.energy < state.energyMax) {
-                state.energy += 1;
-                save();
-                updateUI();
-            }
-        }, 1000);
-
-        // START
+        // Boshlanishi
         updateUI();
 
     </script>
