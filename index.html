@@ -1,41 +1,39 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruzi Coin App</title>
+    <title>Fruzi Coin Fixed</title>
     <style>
         body {
             background-color: #000;
             color: white;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: sans-serif;
             margin: 0;
             overflow: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-        }
-
-        /* --- ASOSIY EKRAN --- */
-        .game-screen {
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
         }
 
+        /* --- ASOSIY EKRAN --- */
         .score-big {
             font-size: 60px;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            z-index: 5;
         }
 
         .coin-wrapper {
-            position: relative;
-            margin: 20px 0;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10; /* Tanga bosilishi uchun */
         }
 
         .coin {
@@ -43,48 +41,55 @@
             height: 260px;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #ffd700, #e6ac00);
-            box-shadow: 0 0 60px rgba(255, 165, 0, 0.4), inset -10px -10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 0 50px rgba(255, 165, 0, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             border: 8px solid #d4af37;
-            transition: transform 0.1s;
+            position: relative;
         }
+        
         .coin:active { transform: scale(0.95); }
         .coin-text { font-size: 100px; font-weight: bold; color: #b8860b; }
 
-        /* Energiya va Menu tugmasi */
+        /* --- MENU TUGMASI (TUZATILDI) --- */
         .bottom-controls {
-            position: absolute;
-            bottom: 30px;
-            width: 90%;
+            position: fixed; /* Ekranda qotirib qo'yish */
+            bottom: 20px;
+            left: 0;
+            width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            gap: 20px;
+            z-index: 9999; /* Hamma narsadan tepada turishi SHART */
+            pointer-events: auto; /* Bosishga ruxsat */
         }
 
         .energy-box {
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 12px 20px;
             border-radius: 30px;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 10px;
-            width: 60%;
+            gap: 5px;
         }
         
         .menu-btn {
-            background: linear-gradient(90deg, #007bff, #0056b3);
+            background: #007bff;
             border: none;
-            padding: 12px 25px;
+            padding: 12px 30px;
             border-radius: 30px;
             color: white;
             font-weight: bold;
             font-size: 16px;
+            box-shadow: 0 0 15px rgba(0,123,255,0.6);
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0,123,255,0.5);
         }
+        
+        .menu-btn:active { transform: scale(0.9); }
 
         /* +1 animatsiyasi */
         .float-text {
@@ -92,18 +97,19 @@
             color: white;
             font-weight: bold;
             font-size: 30px;
-            animation: floatUp 0.8s ease-out forwards;
             pointer-events: none;
+            animation: floatUp 0.8s forwards;
+            z-index: 100;
         }
         @keyframes floatUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* --- MENU (Pastdan chiqadigan oyna) --- */
+        /* --- MENU OYNASI --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.8);
-            z-index: 100;
-            display: none; /* Boshida yashirin */
+            z-index: 10000;
+            display: none;
             justify-content: center;
             align-items: flex-end;
         }
@@ -111,236 +117,153 @@
         .modal-content {
             background: #1a1a1a;
             width: 100%;
-            height: 85vh;
-            border-radius: 25px 25px 0 0;
+            height: 70vh;
+            border-radius: 20px 20px 0 0;
             padding: 20px;
             overflow-y: auto;
-            position: relative;
-            box-shadow: 0 -5px 30px rgba(0,123,255,0.2);
-            animation: slideUp 0.3s ease-out;
+            text-align: center;
         }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         .close-btn {
-            position: absolute;
-            top: 15px; right: 20px;
-            background: none; border: none;
-            color: #666; font-size: 24px;
+            background: red; color: white; border: none;
+            padding: 5px 15px; border-radius: 10px;
+            float: right; font-weight: bold; margin-bottom: 10px;
         }
 
-        h2 { border-left: 4px solid #007bff; padding-left: 10px; margin-bottom: 20px; }
-
-        /* 1. BOOSTERS GRID */
-        .boost-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
+        .boost-item {
+            background: #333; margin: 10px 0; padding: 15px;
+            border-radius: 10px; display: flex;
+            justify-content: space-between; align-items: center;
         }
-
-        .boost-card {
-            background: #252525;
-            padding: 15px;
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid #333;
-        }
-        .boost-icon { font-size: 30px; margin-bottom: 10px; display: block; }
-        .boost-title { font-weight: bold; font-size: 14px; display: block; }
-        .boost-cost { color: #f7b733; font-size: 12px; margin-top: 5px; display: block; }
         
-        .buy-btn {
-            background: #007bff; border: none;
-            color: white; padding: 5px 15px;
-            border-radius: 10px; margin-top: 10px;
-            font-size: 12px; width: 100%;
+        .boost-btn {
+            background: #ffd700; border: none; padding: 8px 20px;
+            border-radius: 5px; font-weight: bold; color: black;
         }
-
-        /* 2. INVITE SECTION */
-        .invite-card {
-            background: linear-gradient(45deg, #1e3c72, #2a5298);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .invite-btn {
-            background: white; color: #1e3c72;
-            border: none; padding: 10px 30px;
-            border-radius: 20px; font-weight: bold;
-            margin-top: 10px; cursor: pointer;
-        }
-
-        /* 3. LEADERBOARD */
-        .leader-item {
-            display: flex;
-            justify-content: space-between;
-            background: #252525;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        .rank-badge {
-            background: #ffd700; color: black;
-            width: 25px; height: 25px;
-            border-radius: 50%;
-            display: inline-flex; align-items: center; justify-content: center;
-            font-weight: bold; margin-right: 10px;
-        }
-        .player-name { font-weight: 500; }
-        .player-score { color: #007bff; font-weight: bold; }
 
     </style>
 </head>
 <body>
 
-    <div class="game-screen">
-        <div class="score-big" id="score">0</div>
-        
-        <div class="coin-wrapper">
-            <div class="coin" id="coinBtn">
-                <div class="coin-text">F</div>
-            </div>
+    <div class="score-big" id="score">0</div>
+    
+    <div class="coin-wrapper">
+        <div class="coin" id="coinBtn">
+            <div class="coin-text">F</div>
         </div>
+    </div>
 
-        <div class="bottom-controls">
-            <div class="energy-box">
-                ⚡ <span id="energyVal">1000</span>
-            </div>
-            <button class="menu-btn" onclick="openMenu()">🚀 Menu</button>
-        </div>
+    <div class="bottom-controls">
+        <div class="energy-box">⚡ <span id="energyVal">1000</span></div>
+        <button class="menu-btn" id="openMenuBtn">🚀 Menu</button>
     </div>
 
     <div class="modal-overlay" id="menuModal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeMenu()">✕</button>
-
-            <h2>Boosters</h2>
-            <div class="boost-grid">
-                <div class="boost-card">
-                    <span class="boost-icon">👆</span>
-                    <span class="boost-title">Multitap</span>
-                    <span class="boost-cost" id="multiCost">100 coins</span>
-                    <button class="buy-btn" onclick="buyMultitap()">Upgrade</button>
+            <button class="close-btn" id="closeMenuBtn">Yopish X</button>
+            <h2>🚀 Kuchaytirgichlar</h2>
+            
+            <div class="boost-item">
+                <div style="text-align:left">
+                    <div>👆 <b>Multitap</b></div>
+                    <div style="font-size:12px; color:#aaa" id="multiCost">100 coins</div>
                 </div>
-                <div class="boost-card">
-                    <span class="boost-icon">🔋</span>
-                    <span class="boost-title">Energy Limit</span>
-                    <span class="boost-cost" id="energyCost">100 coins</span>
-                    <button class="buy-btn" onclick="buyEnergyLimit()">Upgrade</button>
-                </div>
+                <button class="boost-btn" id="buyMultiBtn">Olish</button>
             </div>
 
-            <h2>Invite Friends</h2>
-            <div class="invite-card">
-                <div style="font-size: 24px; margin-bottom: 10px;">👥</div>
-                <div>Invite a friend and get <span style="color:#ffd700">+500</span></div>
-                <button class="invite-btn" onclick="copyRefLink()">Copy Link 🔗</button>
+            <div class="boost-item">
+                <div style="text-align:left">
+                    <div>🔋 <b>Energy Limit</b></div>
+                    <div style="font-size:12px; color:#aaa" id="energyCost">100 coins</div>
+                </div>
+                <button class="boost-btn" id="buyEnergyBtn">Olish</button>
             </div>
-
-            <h2>Top Miners 🏆</h2>
-            <div id="leaderboard">
-                <div class="leader-item">
-                    <div><span class="rank-badge">1</span> <span class="player-name">EchoesTme</span></div>
-                    <div class="player-score">1,238,869</div>
-                </div>
-                <div class="leader-item">
-                    <div><span class="rank-badge" style="background:silver;">2</span> <span class="player-name">uzbnexus</span></div>
-                    <div class="player-score">572,873</div>
-                </div>
-                <div class="leader-item">
-                    <div><span class="rank-badge" style="background:#cd7f32;">3</span> <span class="player-name">Siz (Admin)</span></div>
-                    <div class="player-score" id="myRankScore">0</div>
-                </div>
+            
+            <br>
+            <h3>Do'stlarni taklif qilish</h3>
+            <div style="background:#004085; padding:15px; border-radius:10px;">
+                <p>Har bir do'st uchun +500 ball!</p>
+                <button class="boost-btn" onclick="alert('Havola nusxalandi!')" style="background:white; color:blue">Linkdan nusxa olish</button>
             </div>
-            <br><br><br>
         </div>
     </div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+        // XATOLIKLARNI OLDINI OLISH
+        try {
+            const scoreEl = document.getElementById('score');
+            const energyEl = document.getElementById('energyVal');
+            const coinBtn = document.getElementById('coinBtn');
+            const menuModal = document.getElementById('menuModal');
+            
+            // Xotirani o'qish
+            let score = Number(localStorage.getItem('f_score')) || 0;
+            let multitap = Number(localStorage.getItem('f_multitap')) || 1;
+            let energy = 1000;
+            let multiCost = multitap * 100;
 
-        // --- XOTIRA VA O'ZGARUVCHILAR ---
-        let score = parseInt(localStorage.getItem('f_score')) || 0;
-        let multitap = parseInt(localStorage.getItem('f_multitap')) || 1; // Har bosganda qancha berishi
-        let energyMax = parseInt(localStorage.getItem('f_energyMax')) || 1000;
-        let energy = energyMax;
-
-        // Narxlar (Har safar qimmatlashib boradi)
-        let multiCost = multitap * 100;
-        let energyCost = (energyMax / 500) * 100;
-
-        // Elementlar
-        const scoreEl = document.getElementById('score');
-        const energyVal = document.getElementById('energyVal');
-        const myRankScore = document.getElementById('myRankScore');
-
-        // Boshlanishida yangilash
-        updateUI();
-
-        // --- O'YIN MEXANIKASI ---
-        document.getElementById('coinBtn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            for (let i = 0; i < e.touches.length; i++) {
-                handleTap(e.touches[i].clientX, e.touches[i].clientY);
+            // Ekranni yangilash
+            function update() {
+                scoreEl.innerText = score;
+                energyEl.innerText = energy;
+                document.getElementById('multiCost').innerText = multiCost + " coins";
             }
-        }, {passive: false});
+            update();
 
-        document.getElementById('coinBtn').addEventListener('click', (e) => {
-            handleTap(e.clientX, e.clientY);
-        });
+            // TANGA BOSISH
+            coinBtn.addEventListener('click', (e) => {
+                if(energy >= multitap) {
+                    score += multitap;
+                    energy -= multitap;
+                    localStorage.setItem('f_score', score);
+                    update();
+                    
+                    // +1 animatsiyasi
+                    let float = document.createElement('div');
+                    float.className = 'float-text';
+                    float.innerText = '+' + multitap;
+                    float.style.left = e.clientX + 'px';
+                    float.style.top = (e.clientY - 50) + 'px';
+                    document.body.appendChild(float);
+                    setTimeout(() => float.remove(), 800);
+                }
+            });
 
-        function handleTap(x, y) {
-            if (energy >= multitap) {
-                score += multitap;
-                energy -= multitap;
-                saveData();
-                updateUI();
-                
-                // Animatsiya
-                showFloat(x, y, '+' + multitap);
-                tg.HapticFeedback.impactOccurred('light');
-            }
+            // MENU OCHISH VA YOPISH (Eng oddiy usulda)
+            document.getElementById('openMenuBtn').addEventListener('click', () => {
+                menuModal.style.display = 'flex';
+            });
+            
+            document.getElementById('closeMenuBtn').addEventListener('click', () => {
+                menuModal.style.display = 'none';
+            });
+
+            // SOTIB OLISH
+            document.getElementById('buyMultiBtn').addEventListener('click', () => {
+                if(score >= multiCost) {
+                    score -= multiCost;
+                    multitap++;
+                    multiCost = multitap * 100;
+                    localStorage.setItem('f_multitap', multitap);
+                    localStorage.setItem('f_score', score);
+                    update();
+                    alert("Tabriklaymiz! Kuchaydi ✅");
+                } else {
+                    alert("Mablag' yetarli emas ❌");
+                }
+            });
+            
+            // ENERGIYA TIKLANISHI
+            setInterval(() => {
+                if(energy < 1000) {
+                    energy++;
+                    energyEl.innerText = energy;
+                }
+            }, 1000);
+
+        } catch (error) {
+            console.log("Xatolik:", error);
         }
-
-        // --- MENU FUNKSIYALARI ---
-        function openMenu() { document.getElementById('menuModal').style.display = 'flex'; }
-        function closeMenu() { document.getElementById('menuModal').style.display = 'none'; }
-
-        // 1. Multitap sotib olish
-        function buyMultitap() {
-            if (score >= multiCost) {
-                score -= multiCost;
-                multitap++;
-                multiCost = multitap * 100; // Keyingi narx
-                saveData();
-                updateUI();
-                tg.HapticFeedback.notificationOccurred('success');
-            } else {
-                tg.HapticFeedback.notificationOccurred('error');
-            }
-        }
-
-        // 2. Energiya sotib olish
-        function buyEnergyLimit() {
-            if (score >= energyCost) {
-                score -= energyCost;
-                energyMax += 500;
-                energyCost = (energyMax / 500) * 100;
-                saveData();
-                updateUI();
-                tg.HapticFeedback.notificationOccurred('success');
-            } else {
-                tg.HapticFeedback.notificationOccurred('error');
-            }
-        }
-
-        // 3. Link nusxalash
-        function copyRefLink() {
-            // O'zingizning bot usernameni shu yerga yozing
-            const link = `https://t.me/FruziCoin_bot?start=ref_${tg.initDataUnsafe?.user?.id || 'user'}`;
-            navigator.clipboard.writeText(link).then(() => {
-                alert("Link nusxalandi! Do'stlarga yuboring.");
+    </script>
+</body>
+</html>
