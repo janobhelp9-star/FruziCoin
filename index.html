@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Professional Clicker</title>
+    <style>
+        body {
+            background-color: #000; /* Qora fon */
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Scroll bo'lmasligi uchun */
+            user-select: none; /* Matn belgilab olinmasligi uchun */
+        }
+
+        .score-container {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .coin {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, #f7b733 0%, #fc4a1a 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(252, 74, 26, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .coin:active {
+            transform: scale(0.95); /* Bosganda kichrayish effekti */
+        }
+
+        .coin img {
+            width: 200px;
+            pointer-events: none;
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            background-color: #fc4a1a;
+            width: 100%;
+            transition: width 0.5s;
+        }
+
+        /* Bosganda chiqadigan +1 yozuvi */
+        .float-text {
+            position: absolute;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            animation: floatUp 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+
+        h3 { color: #888; margin-top: 5px; font-weight: normal; }
+    </style>
+</head>
+<body>
+
+    <div class="score-container">
+        <span id="score">0</span>
+    </div>
+    <h3>Referral Coin</h3>
+
+    <div class="coin" id="coinBtn">
+        <h1 style="font-size: 100px; margin:0;">💰</h1>
+    </div>
+
+    <div class="progress-bar">
+        <div class="fill" id="energy"></div>
+    </div>
+    <p>Energy: <span id="energyText">1000</span>/1000</p>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Ilovani to'liq ekranga yoyish
+
+        let score = 0;
+        let energy = 1000;
+        const scoreEl = document.getElementById('score');
+        const energyEl = document.getElementById('energyText');
+        const fillEl = document.getElementById('energy');
+        const coinBtn = document.getElementById('coinBtn');
+
+        coinBtn.addEventListener('click', (e) => {
+            if (energy > 0) {
+                // Ball qo'shish
+                score++;
+                energy--;
+                updateDisplay();
+
+                // Vibratsiya (Telefonda seziladi)
+                tg.HapticFeedback.impactOccurred('medium');
+
+                // +1 animatsiyasini chiqarish
+                showFloatText(e.clientX, e.clientY);
+            }
+        });
+
+        function updateDisplay() {
+            scoreEl.innerText = score.toLocaleString();
+            energyEl.innerText = energy;
+            fillEl.style.width = (energy / 1000 * 100) + '%';
+        }
+
+        function showFloatText(x, y) {
+            const text = document.createElement('div');
+            text.className = 'float-text';
+            text.innerText = '+1';
+            text.style.left = x + 'px';
+            text.style.top = y + 'px';
+            document.body.appendChild(text);
+
+            setTimeout(() => {
+                text.remove();
+            }, 1000);
+        }
+
+        // Energiyani tiklash (har 1 sekundda)
+        setInterval(() => {
+            if (energy < 1000) {
+                energy++;
+                updateDisplay();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
+
