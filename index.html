@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruzi Coin Ultra</title>
+    <title>Fruzi Coin Final</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --gold: #ffd700; --bg: #0f0f0f; --text: #ffffff; --green: #00ff00; }
+        /* --- DIZAYN --- */
+        :root { --gold: #ffd700; --bg: #0f0f0f; --text: #ffffff; }
         body { background: radial-gradient(circle at center, #1f1f1f 0%, #000000 100%); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; height: 100vh; display: flex; flex-direction: column; }
 
         /* LOADING */
@@ -15,43 +16,46 @@
         .loader { border: 4px solid #333; border-top: 4px solid var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* UI HEADER */
+        /* HEADER & SCORE */
         .header { text-align: center; margin-top: 20px; }
         .league-badge { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 5px; }
         #score { font-size: 48px; font-weight: 800; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
-        /* COIN (DYNAMIC LEAGUE COLOR) */
+        /* COIN */
         .coin-wrapper { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; position: relative; }
         .coin {
             width: 75vw; height: 75vw; max-width: 290px; max-height: 290px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
             position: relative; transition: transform 0.05s; cursor: pointer;
-            box-shadow: 0 0 80px rgba(255,255,255,0.1);
-            border: 8px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 80px rgba(255,255,255,0.1); border: 8px solid rgba(255,255,255,0.1);
         }
         .coin:active { transform: scale(0.94); }
         .coin-logo { font-size: 50px; font-weight: 900; font-family: serif; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
 
-        /* LEAGUE STYLES */
-        .bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #8b4513); border-color: #8b4513; box-shadow: 0 0 60px rgba(205,127,50,0.4); }
-        .bronze .coin-logo { color: #5a2d0c; }
-        
-        .silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #a9a9a9); border-color: #a9a9a9; box-shadow: 0 0 60px rgba(255,255,255,0.3); }
-        .silver .coin-logo { color: #555; }
-        
-        .gold { background: radial-gradient(circle at 30% 30%, #ffd700, #ffaa00); border-color: #b8860b; box-shadow: 0 0 60px rgba(255,215,0,0.4); }
-        .gold .coin-logo { color: #7a5c00; }
-        
-        .diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #0088ff); border-color: #0055aa; box-shadow: 0 0 60px rgba(0,255,255,0.4); }
-        .diamond .coin-logo { color: #003366; }
+        /* LEAGUE COLORS */
+        .bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #8b4513); border-color: #8b4513; }
+        .silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #a9a9a9); border-color: #a9a9a9; }
+        .gold { background: radial-gradient(circle at 30% 30%, #ffd700, #ffaa00); border-color: #b8860b; }
+        .diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #0088ff); border-color: #0055aa; }
 
-        /* LIST ITEMS */
-        .list-item { background: rgba(255,255,255,0.08); padding: 15px; margin-bottom: 10px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .btn-action { background: var(--gold); border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; color: black; min-width: 80px; }
+        /* LIST ITEMS (Standard & Uniform) */
+        .list-item { 
+            background: rgba(255,255,255,0.08); padding: 12px 15px; margin-bottom: 10px; 
+            border-radius: 16px; display: flex; justify-content: space-between; align-items: center; 
+            border: 1px solid rgba(255,255,255,0.05); min-height: 56px; 
+        }
+        .item-left { display: flex; align-items: center; gap: 12px; flex-grow: 1; }
+        .task-img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+        .boost-icon { font-size: 28px; width: 32px; text-align: center; }
+        
+        .btn-action { 
+            background: var(--gold); border: none; padding: 0; width: 90px; height: 36px; 
+            border-radius: 10px; font-weight: bold; cursor: pointer; color: black; 
+            display: flex; align-items: center; justify-content: center; font-size: 14px;
+        }
         .btn-action:disabled { background: #333; color: #00ff00; cursor: default; border: 1px solid #444; }
 
-        /* DAILY REWARD MODAL */
+        /* DAILY MODAL */
         .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; display:none; justify-content:center; align-items:center; }
         .modal-content { background:#222; padding:30px; border-radius:20px; text-align:center; width:80%; border:1px solid var(--gold); }
         
@@ -62,6 +66,7 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 11px; width: 20%; transition: 0.2s; }
         .nav-item.active { color: var(--gold); transform: translateY(-5px); }
         .nav-icon { font-size: 24px; margin-bottom: 5px; }
+        
         .float-text { position: absolute; color: white; font-weight: bold; font-size: 32px; pointer-events: none; animation: floatUp 0.8s forwards; z-index: 999; }
         @keyframes floatUp { to { transform: translateY(-120px); opacity: 0; } }
     </style>
@@ -78,8 +83,8 @@
         <div class="modal-content">
             <div style="font-size:50px">📅</div>
             <h2 style="color:var(--gold)">Daily Reward</h2>
-            <p>You logged in today!</p>
-            <h1 id="dailyAmount">+5,000</h1>
+            <p>Come back daily!</p>
+            <h1>+5,000</h1>
             <button class="btn-action" onclick="claimDaily()" style="width:100%">Claim</button>
         </div>
     </div>
@@ -105,23 +110,35 @@
 
         <div class="page" id="boostPage">
             <h2 style="color:var(--gold)">🚀 Boosters</h2>
-            <div class="list-item" style="border:1px solid var(--gold); background:rgba(255,215,0,0.05)">
-                <div><b style="color:var(--gold)">🤖 Auto Bot</b><br><span style="font-size:11px; color:#aaa">Mines while you sleep</span></div>
-                <button class="btn-action" id="buyBotBtn">Active</button>
+            
+            <div class="list-item" style="border-color:var(--gold);">
+                <div class="item-left">
+                    <div class="boost-icon">🤖</div>
+                    <div><b style="color:var(--gold)">Auto Bot</b><br><span style="font-size:11px; color:#aaa">Offline mining</span></div>
+                </div>
+                <button class="btn-action" id="buyBotBtn">1,000,000</button>
             </div>
+
             <div class="list-item">
-                <div><b>👆 Multitap</b> <span style="font-size:11px; color:#888" id="multiInfo">Lvl 1</span></div>
+                <div class="item-left">
+                    <div class="boost-icon">👆</div>
+                    <div><b>Multitap</b><br><span style="font-size:11px; color:#888" id="multiInfo">Lvl 1</span></div>
+                </div>
                 <button class="btn-action" id="buyMultiBtn">Up</button>
             </div>
+
             <div class="list-item">
-                <div><b>🔋 Energy Limit</b> <span style="font-size:11px; color:#888" id="energyInfo">Lvl 1</span></div>
+                <div class="item-left">
+                    <div class="boost-icon">🔋</div>
+                    <div><b>Energy Limit</b><br><span style="font-size:11px; color:#888" id="energyInfo">Lvl 1</span></div>
+                </div>
                 <button class="btn-action" id="buyEnergyBtn">Up</button>
             </div>
         </div>
 
         <div class="page" id="tasksPage">
             <h2 style="color:var(--gold)">📋 Tasks</h2>
-            <p style="color:#666; font-size:12px; margin-top:-10px">Complete to earn coins!</p>
+            <p style="color:#666; font-size:12px; margin-top:-10px">Earn coins instantly</p>
             <div id="tasksList" style="width:100%"></div>
         </div>
 
@@ -129,7 +146,7 @@
             <h2 style="color:var(--gold)">👥 Invite Friends</h2>
             <div style="background:#1c1c1e; padding:20px; border-radius:15px; text-align:center; width:100%; margin-bottom:20px">
                 <div style="font-size:40px">🎁</div>
-                <p style="color:#aaa">Get +5,000 coins per friend</p>
+                <p style="color:#aaa">+5,000 coins per friend</p>
                 <button class="btn-action" style="width:100%" id="inviteBtn">Copy Link 🔗</button>
             </div>
             <div style="width:100%">
@@ -154,26 +171,50 @@
 
     <script>
         // ==========================================
-        // ⚙️ CONFIG (Linklarni shu yerga qo'ying)
+        // ⚙️ BOSHQARUV PULTI (CONFIG)
         // ==========================================
         const CONFIG = {
-            botUserName: 'Fruzi_original_bot', 
-            links: {
-                telegram: 'https://t.me/FruziCoin_Channel',
-                youtube: 'https://youtube.com/@FruziCoin',
-                instagram: 'https://instagram.com/FruziCoin',
-                twitter: 'https://twitter.com/FruziCoin',
-                tiktok: 'https://tiktok.com/@FruziCoin'
+            botUserName: 'Fruzi_original_bot', // <-- BOT NOMINI YOZING
+            
+            // Limitlar va Narxlar (Shu yerdan o'zgartirasiz)
+            prices: {
+                bot: 500000,      // Avto Bot narxi (1 mln)
+                multitapBase: 500, // Multitap narxi
+                energyBase: 500,   // Energy narxi
+                taskReward: 50000, // Vazifa bonusi (50k)
+                referral: 50000     // Do'st chaqirsa (5k)
             },
-            prices: { bot: 100, taskReward: 50000, referral: 5000 },
+
+            // Ijtimoiy tarmoq logolari va linklari
             tasks: [
-                { id: 'tg', name: 'Telegram Channel', icon: '✈️', type: 'telegram' },
-                { id: 'yt', name: 'YouTube Channel', icon: '▶️', type: 'youtube' },
-                { id: 'tt', name: 'TikTok', icon: '🎵', type: 'tiktok' },
-                { id: 'ig', name: 'Instagram', icon: '📸', type: 'instagram' },
-                { id: 'tw', name: 'Twitter (X)', icon: '🐦', type: 'twitter' }
+                { 
+                    id: 'tg', name: 'Telegram', 
+                    link: 'https://t.me/FruziCoin_Channel', 
+                    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png' 
+                },
+                { 
+                    id: 'yt', name: 'YouTube', 
+                    link: 'https://youtube.com/@FruziCoin', 
+                    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png' 
+                },
+                { 
+                    id: 'tt', name: 'TikTok', 
+                    link: 'https://tiktok.com/@FruziCoin', 
+                    img: 'https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png' 
+                },
+                { 
+                    id: 'ig', name: 'Instagram', 
+                    link: 'https://instagram.com/FruziCoin', 
+                    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png' 
+                },
+                { 
+                    id: 'tw', name: 'Twitter (X)', 
+                    link: 'https://twitter.com/FruziCoin', 
+                    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png' 
+                }
             ]
         };
+        // ==========================================
 
         const SUPABASE_URL = 'https://dwotktqghawusjbmvvak.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3b3RrdHFnaGF3dXNqYm12dmFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MDA5NjUsImV4cCI6MjA4NDM3Njk2NX0.AgSlVmVUksfSuQCHvSXyHlEzEnZ8N5aZlE1fIk0YEH4';
@@ -181,247 +222,92 @@
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: 888, first_name: "Admin" };
+        const user = tg.initDataUnsafe.user || { id: 111, first_name: "User" };
         const startParam = tg.initDataUnsafe.start_param;
 
-        let state = { 
-            balance: 0, energy: 1000, energy_max: 1000, 
-            multitap: 1, energy_limit: 1, has_bot: false,
-            completedTasks: {}, lastDaily: null
-        };
+        let state = { balance: 0, energy: 1000, energy_max: 1000, multitap: 1, energy_limit: 1, has_bot: false, completedTasks: {}, lastDaily: null };
 
         async function init() {
             try {
                 let { data: u, error } = await sb.from('users').select('*').eq('id', user.id).single();
-
                 if (error && error.code === 'PGRST116') {
-                    // Yangi user
                     let refId = (startParam && startParam.startsWith('ref_')) ? parseInt(startParam.split('_')[1]) : null;
                     let startBal = refId ? CONFIG.prices.referral : 0;
-                    
-                    await sb.from('users').insert([{
-                        id: user.id, username: user.username, first_name: user.first_name,
-                        balance: startBal, invited_by: refId
-                    }]);
-                    
+                    await sb.from('users').insert([{ id: user.id, username: user.username, first_name: user.first_name, balance: startBal, invited_by: refId }]);
                     if(refId) await sb.rpc('increment_balance', { user_id: refId, amount: CONFIG.prices.referral });
                     state.balance = startBal;
                 } else if (u) {
-                    state = { 
-                        balance: u.balance, energy: u.energy, energy_max: u.energy_max, 
-                        multitap: u.multitap_level, energy_limit: u.energy_limit_level, has_bot: u.has_auto_bot,
-                        completedTasks: u.completed_tasks || {},
-                        lastDaily: u.last_daily_claim
-                    };
-                    
+                    state = { balance: u.balance, energy: u.energy, energy_max: u.energy_max, multitap: u.multitap_level, energy_limit: u.energy_limit_level, has_bot: u.has_auto_bot, completedTasks: u.completed_tasks || {}, lastDaily: u.last_daily_claim };
                     let diff = Math.floor((Date.now() - new Date(u.last_active).getTime())/1000);
                     state.energy = Math.min(state.energy_max, state.energy + diff);
-                    if(state.has_bot && diff > 60) {
-                        state.balance += diff;
-                        alert(`🤖 Auto Bot mined +${diff} coins!`);
-                    }
+                    if(state.has_bot && diff > 60) { state.balance += diff; alert(`🤖 Auto Bot mined +${diff} coins!`); }
                 }
-
-                updateUI();
-                renderTasks();
-                checkLeague();
-                checkDailyReward(); // Kunlik bonus
-                
-                document.getElementById('loadingScreen').style.display = 'none';
-                document.getElementById('gameContainer').style.display = 'block';
-                setInterval(save, 2000); // 2 sekundda saqlash
-
-            } catch (e) {
-                document.getElementById('errorText').innerText = "Error: " + e.message;
-                document.getElementById('errorText').style.display = 'block';
-            }
+                updateUI(); renderTasks(); checkLeague(); checkDaily();
+                document.getElementById('loadingScreen').style.display = 'none'; document.getElementById('gameContainer').style.display = 'block';
+                setInterval(save, 2000);
+            } catch (e) { document.getElementById('errorText').innerText = e.message; document.getElementById('errorText').style.display = 'block'; }
         }
 
-        async function save() {
-            await sb.from('users').upsert({
-                id: user.id,
-                balance: state.balance,
-                energy: state.energy,
-                energy_max: state.energy_max,
-                multitap_level: state.multitap,
-                energy_limit_level: state.energy_limit,
-                has_auto_bot: state.has_bot,
-                completed_tasks: state.completedTasks, // Vazifalar saqlanadi
-                last_daily_claim: state.lastDaily,
-                last_active: new Date().toISOString()
-            });
-        }
+        async function save() { await sb.from('users').upsert({ id: user.id, balance: state.balance, energy: state.energy, energy_max: state.energy_max, multitap_level: state.multitap, energy_limit_level: state.energy_limit, has_auto_bot: state.has_bot, completed_tasks: state.completedTasks, last_daily_claim: state.lastDaily, last_active: new Date().toISOString() }); }
 
-        // --- DAILY REWARD ---
-        function checkDailyReward() {
-            let now = new Date();
-            let last = state.lastDaily ? new Date(state.lastDaily) : new Date(0);
-            
-            // Agar oxirgi olishdan 24 soat o'tgan bo'lsa
-            let diffHours = (now - last) / (1000 * 60 * 60);
-            
-            if (diffHours >= 24) {
-                document.getElementById('dailyModal').style.display = 'flex';
-            }
+        function checkDaily() {
+            let now = new Date(); let last = state.lastDaily ? new Date(state.lastDaily) : new Date(0);
+            if ((now - last) / (1000 * 60 * 60) >= 24) document.getElementById('dailyModal').style.display = 'flex';
         }
+        function claimDaily() { state.balance += 5000; state.lastDaily = new Date().toISOString(); document.getElementById('dailyModal').style.display = 'none'; updateUI(); save(); }
 
-        function claimDaily() {
-            state.balance += 5000;
-            state.lastDaily = new Date().toISOString();
-            document.getElementById('dailyModal').style.display = 'none';
-            updateUI();
-            save();
-            tg.HapticFeedback.notificationOccurred('success');
-        }
-
-        // --- LEAGUES ---
         function checkLeague() {
-            let el = document.getElementById('coinBtn');
-            let name = document.getElementById('leagueName');
-            
-            // Reset classes
-            el.classList.remove('bronze', 'silver', 'gold', 'diamond');
-            
-            if (state.balance < 5000) {
-                el.classList.add('bronze'); name.innerText = "Bronze League"; name.style.color = "#cd7f32";
-            } else if (state.balance < 50000) {
-                el.classList.add('silver'); name.innerText = "Silver League"; name.style.color = "#e0e0e0";
-            } else if (state.balance < 1000000) {
-                el.classList.add('gold'); name.innerText = "Gold League"; name.style.color = "#ffd700";
-            } else {
-                el.classList.add('diamond'); name.innerText = "Diamond League"; name.style.color = "#00ffff";
-            }
+            let el = document.getElementById('coinBtn'), name = document.getElementById('leagueName'); el.classList.remove('bronze', 'silver', 'gold', 'diamond');
+            if (state.balance < 5000) { el.classList.add('bronze'); name.innerText = "Bronze League"; name.style.color = "#cd7f32"; }
+            else if (state.balance < 50000) { el.classList.add('silver'); name.innerText = "Silver League"; name.style.color = "#e0e0e0"; }
+            else if (state.balance < 1000000) { el.classList.add('gold'); name.innerText = "Gold League"; name.style.color = "#ffd700"; }
+            else { el.classList.add('diamond'); name.innerText = "Diamond League"; name.style.color = "#00ffff"; }
         }
 
-        // --- TASKS (PERMANENT) ---
         function renderTasks() {
-            const list = document.getElementById('tasksList');
-            list.innerHTML = '';
-            
+            const list = document.getElementById('tasksList'); list.innerHTML = '';
             CONFIG.tasks.forEach(t => {
-                let isDone = state.completedTasks[t.id]; // Bajarilganmi?
-                
-                // TikTok uchun maxsus icon (SVG)
-                let iconHtml = t.icon;
-                if(t.type === 'tiktok') iconHtml = `<svg viewBox="0 0 24 24" fill="white" width="24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>`;
-                
-                let btnHtml = isDone 
-                    ? `<button class="btn-action" disabled style="background:#333; color:#00ff00; border:1px solid #444">Completed ✅</button>`
-                    : `<button class="btn-action" onclick="doTask('${t.id}', '${CONFIG.links[t.type]}', this)">Start</button>`;
-
-                list.innerHTML += `
-                    <div class="list-item">
-                        <div style="display:flex; align-items:center; gap:10px">
-                            ${iconHtml} <b>${t.name}</b>
-                        </div>
-                        ${btnHtml}
-                    </div>`;
+                let isDone = state.completedTasks[t.id];
+                let btnHtml = isDone ? `<button class="btn-action" disabled>Done ✅</button>` : `<button class="btn-action" onclick="doTask('${t.id}', this)">Start</button>`;
+                list.innerHTML += `<div class="list-item"><div class="item-left"><img src="${t.img}" class="task-img"><b>${t.name}</b></div>${btnHtml}</div>`;
             });
         }
-
-        window.doTask = function(taskId, url, btn) {
-            if(state.completedTasks[taskId]) return; // Qayta bosish yo'q
-
-            window.open(url, '_blank');
-            btn.disabled = true; 
-            btn.innerText = "Checking...";
-            
-            setTimeout(() => {
-                state.balance += CONFIG.prices.taskReward;
-                state.completedTasks[taskId] = true; // Xotiraga yozamiz: ID = TRUE
-                updateUI();
-                save();
-                renderTasks(); // Tugmani "Completed"ga aylantirish
-                tg.HapticFeedback.notificationOccurred('success');
-            }, 5000);
+        window.doTask = function(id, btn) { 
+            if(state.completedTasks[id]) return; 
+            let task = CONFIG.tasks.find(t=>t.id===id);
+            window.open(task.link, '_blank'); 
+            btn.disabled=true; btn.innerText="Wait..."; 
+            setTimeout(() => { state.balance += CONFIG.prices.taskReward; state.completedTasks[id] = true; updateUI(); save(); renderTasks(); }, 5000); 
         }
 
-        // --- CORE UI ---
         function updateUI() {
-            document.getElementById('score').innerText = state.balance.toLocaleString();
-            document.getElementById('energyVal').innerText = Math.floor(state.energy);
-            document.getElementById('energyMaxVal').innerText = state.energy_max;
+            document.getElementById('score').innerText = state.balance.toLocaleString(); document.getElementById('energyVal').innerText = Math.floor(state.energy); document.getElementById('energyMaxVal').innerText = state.energy_max;
             
-            document.getElementById('buyMultiBtn').innerText = `Up (${state.multitap * 500})`;
-            document.getElementById('multiInfo').innerText = `Lvl ${state.multitap}`;
-            document.getElementById('buyEnergyBtn').innerText = `Up (${state.energy_limit * 500})`;
-            document.getElementById('energyInfo').innerText = `Lvl ${state.energy_limit}`;
+            // Narxlar CONFIG dan olinadi
+            document.getElementById('buyMultiBtn').innerText = `Up (${(state.multitap * CONFIG.prices.multitapBase).toLocaleString()})`; document.getElementById('multiInfo').innerText = `Lvl ${state.multitap}`;
+            document.getElementById('buyEnergyBtn').innerText = `Up (${(state.energy_limit * CONFIG.prices.energyBase).toLocaleString()})`; document.getElementById('energyInfo').innerText = `Lvl ${state.energy_limit}`;
             
-            let botBtn = document.getElementById('buyBotBtn');
-            if(state.has_bot) { botBtn.innerText = "Active ✅"; botBtn.disabled = true; botBtn.style.background = "#333"; botBtn.style.color = "#00ff00"; }
+            let botBtn = document.getElementById('buyBotBtn'); 
+            if(state.has_bot) { botBtn.innerText = "Active ✅"; botBtn.disabled = true; botBtn.style.background = "#333"; botBtn.style.color = "#00ff00"; } 
             else { botBtn.innerText = CONFIG.prices.bot.toLocaleString(); }
-
-            checkLeague(); // Ligani tekshirish
+            checkLeague();
         }
 
-        // --- TAP LOGIC ---
         const coinBtn = document.getElementById('coinBtn');
-        coinBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            Array.from(e.changedTouches).forEach(t => tap(t.clientX, t.clientY));
-        }, {passive:false});
+        coinBtn.addEventListener('touchstart', (e) => { e.preventDefault(); Array.from(e.changedTouches).forEach(t => tap(t.clientX, t.clientY)); }, {passive:false});
         coinBtn.addEventListener('click', (e) => tap(e.clientX, e.clientY));
+        function tap(x, y) { if(state.energy >= 1) { state.balance += state.multitap; state.energy -= 1; updateUI(); showFloat(x, y, '+' + state.multitap); tg.HapticFeedback.impactOccurred('light'); } }
+        function showFloat(x, y, t) { let el = document.createElement('div'); el.className='float-text'; el.innerText=t; el.style.left=(x-20)+'px'; el.style.top=(y-50)+'px'; document.body.appendChild(el); setTimeout(()=>el.remove(), 800); }
 
-        function tap(x, y) {
-            if(state.energy >= 1) {
-                state.balance += state.multitap;
-                state.energy -= 1;
-                updateUI();
-                showFloat(x, y, '+' + state.multitap);
-                tg.HapticFeedback.impactOccurred('light');
-            }
-        }
-        function showFloat(x, y, t) {
-            let el = document.createElement('div'); el.className='float-text'; el.innerText=t;
-            el.style.left=(x-20)+'px'; el.style.top=(y-50)+'px'; document.body.appendChild(el);
-            setTimeout(()=>el.remove(), 800);
-        }
-
-        // --- FRIENDS & TOP ---
-        window.openPage = function(id, btn) {
-            document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-            btn.classList.add('active');
-            if(id === 'topPage') loadTop();
-            if(id === 'friendsPage') loadFriends();
-        }
-
-        async function loadFriends() {
-            let list = document.getElementById('friendsList');
-            list.innerHTML = 'Loading...';
-            let { data } = await sb.from('users').select('first_name, balance').eq('invited_by', user.id);
-            list.innerHTML = '';
-            if(data && data.length > 0) data.forEach(f => list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #333"><span>${f.first_name}</span><span style="color:var(--gold)">${f.balance.toLocaleString()}</span></div>`);
-            else list.innerHTML = '<div style="text-align:center; padding:20px; color:#666">No friends yet</div>';
-        }
-
-        async function loadTop() {
-            let list = document.getElementById('leaderboardList');
-            list.innerHTML = 'Loading...';
-            let { data } = await sb.from('users').select('first_name, balance').order('balance', {ascending:false}).limit(10);
-            list.innerHTML = '';
-            if(data) data.forEach((p, i) => list.innerHTML += `<div class="list-item"><b>#${i+1} ${p.first_name}</b> <span>${p.balance.toLocaleString()}</span></div>`);
-        }
-
-        document.getElementById('inviteBtn').addEventListener('click', () => {
-            navigator.clipboard.writeText(`https://t.me/${CONFIG.botUserName}?start=ref_${user.id}`);
-            alert("Invite Link Copied!");
-        });
+        window.openPage = function(id, btn) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); btn.classList.add('active'); if(id === 'topPage') loadTop(); if(id === 'friendsPage') loadFriends(); }
+        async function loadFriends() { let list = document.getElementById('friendsList'); list.innerHTML = 'Loading...'; let { data } = await sb.from('users').select('first_name, balance').eq('invited_by', user.id); list.innerHTML = ''; if(data && data.length) data.forEach(f => list.innerHTML += `<div style="display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #333"><span>${f.first_name}</span><span style="color:var(--gold)">${f.balance.toLocaleString()}</span></div>`); else list.innerHTML = '<div style="text-align:center;padding:20px;color:#666">No friends yet</div>'; }
+        async function loadTop() { let list = document.getElementById('leaderboardList'); list.innerHTML = 'Loading...'; let { data } = await sb.from('users').select('first_name, balance').order('balance', {ascending:false}).limit(10); list.innerHTML = ''; if(data) data.forEach((p, i) => list.innerHTML += `<div class="list-item"><b>#${i+1} ${p.first_name}</b><span>${p.balance.toLocaleString()}</span></div>`); }
+        document.getElementById('inviteBtn').addEventListener('click', () => { navigator.clipboard.writeText(`https://t.me/${CONFIG.botUserName}?start=ref_${user.id}`); alert("Invite Link Copied!"); });
         
-        // --- BOOSTERS ---
-        document.getElementById('buyBotBtn').addEventListener('click', () => {
-            if(state.balance >= CONFIG.prices.bot && !state.has_bot) { state.balance -= CONFIG.prices.bot; state.has_bot = true; updateUI(); save(); }
-        });
-        document.getElementById('buyMultiBtn').addEventListener('click', () => {
-            let p = state.multitap * 500; if(state.balance >= p) { state.balance -= p; state.multitap++; updateUI(); save(); }
-        });
-        document.getElementById('buyEnergyBtn').addEventListener('click', () => {
-            let p = state.energy_limit * 500; if(state.balance >= p) { state.balance -= p; state.energy_limit++; state.energy_max += 500; updateUI(); save(); }
-        });
-
-        setInterval(() => { if(state.energy < state.energy_max) { state.energy++; updateUI(); } }, 1000);
-        init();
+        document.getElementById('buyBotBtn').addEventListener('click', () => { if(state.balance >= CONFIG.prices.bot && !state.has_bot) { state.balance -= CONFIG.prices.bot; state.has_bot = true; updateUI(); save(); } });
+        document.getElementById('buyMultiBtn').addEventListener('click', () => { let p = state.multitap * CONFIG.prices.multitapBase; if(state.balance >= p) { state.balance -= p; state.multitap++; updateUI(); save(); } });
+        document.getElementById('buyEnergyBtn').addEventListener('click', () => { let p = state.energy_limit * CONFIG.prices.energyBase; if(state.balance >= p) { state.balance -= p; state.energy_limit++; state.energy_max += 500; updateUI(); save(); } });
+        setInterval(() => { if(state.energy < state.energy_max) { state.energy++; updateUI(); } }, 1000); init();
     </script>
 </body>
 </html>
