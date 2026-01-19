@@ -3,33 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruzi Coin Pro</title>
+    <title>Fruzi Coin Master</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --gold: #ffd700; --bg: #000000; --card: #1c1c1e; --text: #ffffff; }
-        body { background-color: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif; margin: 0; padding: 0; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; height: 100vh; display: flex; flex-direction: column; }
+        :root { --gold: #ffd700; --bg: #000000; --card: #1c1c1e; --text: #ffffff; --btn: #ffd700; }
+        body { background-color: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif; margin: 0; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; height: 100vh; display: flex; flex-direction: column; }
 
-        /* LOADING & ERROR SCREEN */
-        #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+        /* LOADING */
+        #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .loader { border: 4px solid #333; border-top: 4px solid var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #errorText { color: #ff4444; font-weight: bold; margin-top: 20px; font-size: 14px; display: none; }
-        #retryBtn { margin-top: 20px; padding: 10px 20px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; display: none; }
 
-        /* GAME UI */
+        /* POPUP (Offline daromad) */
+        .popup-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index: 2000; display:none; justify-content:center; align-items:center; }
+        .popup-box { background: #222; padding: 30px; border-radius: 20px; text-align: center; width: 80%; border: 1px solid var(--gold); }
+        .popup-btn { background: var(--gold); border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+
+        /* UI */
         .page { display: none; flex-direction: column; height: 100%; width: 100%; padding: 20px 20px 100px 20px; box-sizing: border-box; align-items: center; overflow-y: auto; }
         .page.active { display: flex; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; padding-bottom: 10px; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 11px; width: 20%; cursor: pointer; }
-        .nav-item.active { color: var(--gold); transform: translateY(-2px); }
-        .nav-icon { font-size: 24px; margin-bottom: 4px; }
+        
         #score { font-size: 48px; font-weight: 800; margin: 10px 0; text-shadow: 0 0 20px rgba(255,215,0,0.3); }
-        .coin-wrapper { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
         .coin { width: 70vw; height: 70vw; max-width: 280px; max-height: 280px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffd700, #ffaa00); box-shadow: 0 0 60px rgba(255, 165, 0, 0.4); display: flex; align-items: center; justify-content: center; border: 8px solid #b8860b; position: relative; transition: transform 0.08s; }
         .coin:active { transform: scale(0.95); }
         .coin-logo { font-size: 50px; font-weight: 900; color: #7a5c00; font-family: serif; }
-        .energy-box { background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 30px; margin-bottom: 20px; font-weight: bold; }
+        
+        .list-item { background: var(--card); width: 100%; padding: 15px; margin-bottom: 10px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        .btn-action { background: var(--btn); border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; color: black; }
+        .btn-action:disabled { background: #444; color: #888; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; padding-bottom: 10px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 11px; width: 20%; cursor: pointer; }
+        .nav-item.active { color: var(--gold); }
+        .nav-icon { font-size: 24px; margin-bottom: 4px; }
+        
         .float-text { position: absolute; color: white; font-weight: bold; font-size: 30px; pointer-events: none; animation: floatUp 0.8s forwards; z-index: 999; }
         @keyframes floatUp { to { transform: translateY(-100px); opacity: 0; } }
     </style>
@@ -37,100 +45,297 @@
 <body>
 
     <div id="loadingScreen">
-        <div class="loader" id="loaderSpinner"></div>
-        <div style="color:var(--gold); font-weight:bold">Fruzi Coin</div>
-        <div style="font-size:12px; color:#666; margin-top:5px" id="loadingStatus">Connecting to Server...</div>
-        <div id="errorText"></div>
-        <button id="retryBtn" onclick="location.reload()">Retry Connection</button>
+        <div class="loader"></div>
+        <div style="color:var(--gold)">Connecting...</div>
+        <div id="errorText" style="color:red; display:none; margin-top:10px; text-align:center"></div>
+    </div>
+
+    <div class="popup-overlay" id="offlinePopup">
+        <div class="popup-box">
+            <div style="font-size:40px">🤖</div>
+            <h3>Auto Bot Worked!</h3>
+            <p>While you were away, the bot mined:</p>
+            <h2 style="color:var(--gold)" id="offlineEarned">0</h2>
+            <button class="popup-btn" onclick="closePopup()">Claim</button>
+        </div>
     </div>
 
     <div id="gameContainer" style="display:none; height:100%">
+        
         <div class="page active" id="homePage">
-            <div style="font-size:12px; color:#888; margin-top:20px;">YOUR BALANCE</div>
+            <div style="font-size:12px; color:#888; margin-top:20px;">BALANCE</div>
             <div id="score">0</div>
-            <div class="coin-wrapper"><div class="coin" id="coinBtn"><div class="coin-logo">FRUZI</div></div></div>
-            <div class="energy-box">⚡ <span id="energyVal">1000</span> / <span id="energyMaxVal">1000</span></div>
+            <div style="flex-grow:1; display:flex; align-items:center; justify-content:center">
+                <div class="coin" id="coinBtn"><div class="coin-logo">FRUZI</div></div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1); padding:8px 20px; border-radius:30px; margin-bottom:20px">
+                ⚡ <span id="energyVal">1000</span> / <span id="energyMaxVal">1000</span>
+            </div>
         </div>
+
+        <div class="page" id="boostPage">
+            <h2 style="color:var(--gold)">🚀 Boosters</h2>
+            
+            <div class="list-item" style="border: 1px solid var(--gold)">
+                <div>
+                    <b>🤖 Auto Bot</b><br>
+                    <span style="font-size:11px; color:#aaa">Mines while you sleep</span>
+                </div>
+                <button class="btn-action" id="buyBotBtn">1,000,000</button>
+            </div>
+
+            <div class="list-item">
+                <div><b>👆 Multitap</b> <span style="font-size:11px; color:#888" id="multiInfo">Lvl 1</span></div>
+                <button class="btn-action" id="buyMultiBtn">Up</button>
+            </div>
+            <div class="list-item">
+                <div><b>🔋 Energy</b> <span style="font-size:11px; color:#888" id="energyInfo">Lvl 1</span></div>
+                <button class="btn-action" id="buyEnergyBtn">Up</button>
+            </div>
+        </div>
+
+        <div class="page" id="tasksPage">
+            <h2 style="color:var(--gold)">📋 Tasks (+50k)</h2>
+            <div id="tasksList" style="width:100%"></div>
+        </div>
+
+        <div class="page" id="friendsPage">
+            <h2 style="color:var(--gold)">👥 Invite Friends</h2>
+            <div style="background:#1c1c1e; padding:20px; border-radius:15px; text-align:center; width:100%">
+                <div style="font-size:40px">🎁</div>
+                <h3>Invite & Earn</h3>
+                <p style="color:#888">+5,000 coins per friend</p>
+                <button class="btn-action" style="width:100%" id="inviteBtn">Copy Link 🔗</button>
+            </div>
+        </div>
+
+        <div class="page" id="topPage">
+            <h2 style="color:var(--gold)">🏆 Real Leaders</h2>
+            <div id="leaderboardList" style="width:100%; text-align:center; color:#666">Loading...</div>
+        </div>
+
         <nav class="bottom-nav">
-            <div class="nav-item active"><span class="nav-icon">🏠</span>Home</div>
-            <div class="nav-item"><span class="nav-icon">🚀</span>Boost</div>
-            <div class="nav-item"><span class="nav-icon">📋</span>Tasks</div>
-            <div class="nav-item"><span class="nav-icon">👥</span>Friends</div>
-            <div class="nav-item"><span class="nav-icon">🏆</span>Top</div>
+            <div class="nav-item active" onclick="openPage('homePage', this)"><span class="nav-icon">🏠</span></div>
+            <div class="nav-item" onclick="openPage('boostPage', this)"><span class="nav-icon">🚀</span></div>
+            <div class="nav-item" onclick="openPage('tasksPage', this)"><span class="nav-icon">📋</span></div>
+            <div class="nav-item" onclick="openPage('friendsPage', this)"><span class="nav-icon">👥</span></div>
+            <div class="nav-item" onclick="openPage('topPage', this)"><span class="nav-icon">🏆</span></div>
         </nav>
     </div>
 
     <script>
-        // --- QAT'IY ONLAYN REJIM ---
-        const SUPABASE_URL = 'https://dwotktqghawusjbmvvak.supabase.co';
-        const SUPABASE_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3b3RrdHFnaGF3dXNqYm12dmFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MDA5NjUsImV4cCI6MjA4NDM3Njk2NX0.AgSlVmVUksfSuQCHvSXyHlEzEnZ8N5aZlE1fIk0YEH4';
+        // ==========================================
+        // 🛠 EDITABLE CONFIG (SHU YERNI O'ZGARTIRASIZ)
+        // ==========================================
+        const CONFIG = {
+            // Task linklari (O'zingiznikini qo'ying)
+            links: {
+                telegram: 'https://t.me/FruziCoin_Channel',
+                youtube: 'https://youtube.com/@FruziCoin',
+                instagram: 'https://instagram.com/FruziCoin',
+                twitter: 'https://twitter.com/FruziCoin'
+            },
+            // Narxlar va Bonuslar
+            prices: {
+                bot: 1000000,      // Bot narxi: 1 million
+                taskReward: 50000, // Vazifa bonusi: 50k
+                referral: 5000     // Do'st chaqirish: 5k
+            },
+            botSpeed: 1 // Bot sekundiga qancha ishlaydi (Ilovadan chiqqanda)
+        };
+        // ==========================================
 
+        const SUPABASE_URL = 'https://dwotktqghawusjbmvvak.supabase.co';
+        // Kalitni to'g'irlab qo'ydim (kichkina e)
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3b3RrdHFnaGF3dXNqYm12dmFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MDA5NjUsImV4cCI6MjA4NDM3Njk2NX0.AgSlVmVUksfSuQCHvSXyHlEzEnZ8N5aZlE1fIk0YEH4';
+
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: 999999, first_name: "Debug User" };
+        const user = tg.initDataUnsafe.user || { id: 1001, first_name: "Tester", username: "tester" };
+        const startParam = tg.initDataUnsafe.start_param;
 
-        let sb, state = { balance: 0, energy: 1000, multitap: 1 };
+        let state = { balance: 0, energy: 1000, energy_max: 1000, multitap: 1, energy_limit: 1, has_bot: false };
 
-        function showError(msg) {
-            document.getElementById('loaderSpinner').style.display = 'none';
-            document.getElementById('loadingStatus').innerText = "Connection Failed!";
-            document.getElementById('errorText').style.display = 'block';
-            document.getElementById('errorText').innerText = "ERROR: " + msg;
-            document.getElementById('retryBtn').style.display = 'inline-block';
-        }
-
-        async function initGame() {
+        async function init() {
             try {
-                // 1. Serverga ulanish
-                sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                let { data: u, error } = await sb.from('users').select('*').eq('id', user.id).single();
 
-                // 2. Ulanishni tekshirish (Eng oddiy so'rov)
-                let { data, error: healthErr } = await sb.from('users').select('count').limit(1);
-                if (healthErr) throw healthErr; // Agar server javob bermasa, XATO otamiz
-
-                console.log("Serverga ulandi!");
-                document.getElementById('loadingStatus').innerText = "Loading profile...";
-
-                // 3. Userni yuklash
-                let { data: u, error: userErr } = await sb.from('users').select('*').eq('id', user.id).single();
-                
-                if(userErr && userErr.code === 'PGRST116') {
-                    // Yangi user yaratish
-                    await sb.from('users').insert([{ id: user.id, first_name: user.first_name }]);
-                    state.balance = 0;
+                if (error && error.code === 'PGRST116') {
+                    // New User
+                    let refId = (startParam && startParam.startsWith('ref_')) ? parseInt(startParam.split('_')[1]) : null;
+                    let startBalance = refId ? CONFIG.prices.referral : 0;
+                    
+                    await sb.from('users').insert([{
+                        id: user.id, username: user.username, first_name: user.first_name,
+                        balance: startBalance, invited_by: refId
+                    }]);
+                    if(refId) await sb.rpc('increment_balance', { user_id: refId, amount: CONFIG.prices.referral });
+                    state.balance = startBalance;
                 } else if (u) {
-                    state.balance = u.balance;
-                    state.energy = u.energy;
-                    state.multitap = u.multitap_level;
-                } else if (userErr) {
-                    throw userErr;
-                }
+                    // Load User
+                    state = { 
+                        balance: u.balance, energy: u.energy, energy_max: u.energy_max, 
+                        multitap: u.multitap_level, energy_limit: u.energy_limit_level, 
+                        has_bot: u.has_auto_bot 
+                    };
+                    
+                    // OFFLINE CALCULATION
+                    let now = Date.now();
+                    let last = new Date(u.last_active).getTime();
+                    let diffSec = Math.floor((now - last) / 1000);
 
-                // 4. Muvaffaqiyatli! O'yinni ochamiz
+                    // 1. Energy Regen
+                    state.energy = Math.min(state.energy_max, state.energy + diffSec);
+
+                    // 2. Auto Bot Earnings
+                    if(state.has_bot && diffSec > 60) { // Kamida 1 minut o'tgan bo'lsa
+                        let earnings = diffSec * CONFIG.botSpeed;
+                        state.balance += earnings;
+                        document.getElementById('offlineEarned').innerText = "+" + earnings.toLocaleString();
+                        document.getElementById('offlinePopup').style.display = 'flex';
+                    }
+                } else { throw error; }
+
+                renderTasks();
                 updateUI();
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
                 setInterval(save, 3000);
 
             } catch (e) {
-                console.error("CRITICAL ERROR:", e);
-                // Xatoni ekranga chiqaramiz
-                showError(e.message || JSON.stringify(e));
+                document.getElementById('errorText').innerText = "Connection Error: " + e.message;
+                document.getElementById('errorText').style.display = 'block';
             }
         }
 
-        async function save() { if(sb) await sb.from('users').update({ balance: state.balance, energy: state.energy }).eq('id', user.id); }
-        function updateUI() { document.getElementById('score').innerText = state.balance.toLocaleString(); document.getElementById('energyVal').innerText = Math.floor(state.energy); }
+        async function save() { await sb.from('users').update({ balance: state.balance, energy: state.energy, last_active: new Date() }).eq('id', user.id); }
 
+        function updateUI() {
+            document.getElementById('score').innerText = state.balance.toLocaleString();
+            document.getElementById('energyVal').innerText = Math.floor(state.energy);
+            document.getElementById('energyMaxVal').innerText = state.energy_max;
+            
+            document.getElementById('buyMultiBtn').innerText = `Up (${state.multitap * 500})`;
+            document.getElementById('multiInfo').innerText = `Lvl ${state.multitap}`;
+            document.getElementById('buyEnergyBtn').innerText = `Up (${state.energy_limit * 500})`;
+            document.getElementById('energyInfo').innerText = `Lvl ${state.energy_limit}`;
+
+            // Bot button
+            let botBtn = document.getElementById('buyBotBtn');
+            if(state.has_bot) {
+                botBtn.innerText = "Active ✅";
+                botBtn.disabled = true;
+            } else {
+                botBtn.innerText = CONFIG.prices.bot.toLocaleString();
+            }
+        }
+
+        // --- TASKS RENDER ---
+        function renderTasks() {
+            const list = document.getElementById('tasksList');
+            const tasks = [
+                { id: 'tg', icon: '✈️', name: 'Telegram Channel', url: CONFIG.links.telegram },
+                { id: 'yt', icon: '▶️', name: 'YouTube Channel', url: CONFIG.links.youtube },
+                { id: 'ig', icon: '📸', name: 'Instagram', url: CONFIG.links.instagram },
+                { id: 'tw', icon: '🐦', name: 'Twitter (X)', url: CONFIG.links.twitter }
+            ];
+
+            list.innerHTML = '';
+            tasks.forEach(t => {
+                let div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `
+                    <div>${t.icon} <b>${t.name}</b></div>
+                    <button class="btn-action" onclick="doTask('${t.url}', this)">Start</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        window.doTask = function(url, btn) {
+            window.open(url, '_blank');
+            btn.disabled = true;
+            btn.innerText = "Checking...";
+            setTimeout(() => {
+                state.balance += CONFIG.prices.taskReward;
+                updateUI(); save();
+                btn.innerText = "Done ✅";
+                alert(`Task Complete! +${CONFIG.prices.taskReward.toLocaleString()}`);
+            }, 5000);
+        }
+
+        // --- BOOSTERS ---
+        document.getElementById('buyBotBtn').addEventListener('click', async () => {
+            if(state.has_bot) return;
+            if(state.balance >= CONFIG.prices.bot) {
+                state.balance -= CONFIG.prices.bot;
+                state.has_bot = true;
+                await sb.from('users').update({ has_auto_bot: true }).eq('id', user.id); // save immediately
+                updateUI();
+                alert("Auto Bot Activated! It will mine while you are offline.");
+            } else {
+                alert("Not enough coins!");
+            }
+        });
+
+        document.getElementById('buyMultiBtn').addEventListener('click', () => {
+            let p = state.multitap * 500;
+            if(state.balance >= p) { state.balance -= p; state.multitap++; updateUI(); save(); }
+        });
+        document.getElementById('buyEnergyBtn').addEventListener('click', () => {
+            let p = state.energy_limit * 500;
+            if(state.balance >= p) { state.balance -= p; state.energy_limit++; state.energy_max += 500; updateUI(); save(); }
+        });
+
+        // --- REAL LEADERBOARD ---
+        async function loadTop() {
+            let list = document.getElementById('leaderboardList');
+            list.innerHTML = 'Loading...';
+            // Haqiqiy odamlarni olish
+            let { data } = await sb.from('users').select('username, first_name, balance').order('balance', {ascending:false}).limit(20);
+            
+            if(data && data.length > 0) {
+                list.innerHTML = '';
+                data.forEach((p, i) => {
+                    let name = p.username ? `@${p.username}` : (p.first_name || 'User');
+                    let color = i===0?'#ffd700':(i===1?'#c0c0c0':(i===2?'#cd7f32':'#444'));
+                    list.innerHTML += `
+                        <div class="list-item" style="border-left: 5px solid ${color}">
+                            <div><b>#${i+1} ${name}</b></div>
+                            <span style="color:var(--gold)">${p.balance.toLocaleString()}</span>
+                        </div>`;
+                });
+            } else {
+                list.innerHTML = "No players yet";
+            }
+        }
+
+        // --- CORE ---
         document.getElementById('coinBtn').addEventListener('click', (e) => {
             if(state.energy >= state.multitap) {
                 state.balance += state.multitap; state.energy -= state.multitap;
                 updateUI(); tg.HapticFeedback.impactOccurred('light');
+                let el = document.createElement('div'); el.className='float-text'; el.innerText='+'+state.multitap;
+                el.style.left=(e.clientX-20)+'px'; el.style.top=(e.clientY-50)+'px'; document.body.appendChild(el);
+                setTimeout(()=>el.remove(), 800);
             }
         });
 
-        // Boshlash
-        if (!navigator.onLine) { showError("No Internet Connection"); } else { initGame(); }
+        window.openPage = function(id, btn) {
+            document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+            btn.classList.add('active');
+            if(id === 'topPage') loadTop();
+        }
+
+        window.closePopup = function() { document.getElementById('offlinePopup').style.display='none'; }
+        document.getElementById('inviteBtn').addEventListener('click', () => { navigator.clipboard.writeText(`https://t.me/Fruzi_original_bot?start=ref_${user.id}`); alert("Link Copied!"); });
+        setInterval(() => { if(state.energy < state.energy_max) { state.energy++; updateUI(); } }, 1000);
+
+        init();
     </script>
 </body>
 </html>
+
