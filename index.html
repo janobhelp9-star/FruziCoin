@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruzi Coin Final</title>
+    <title>Fruzi Coin Official</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* --- ASOSIY STIL --- */
+        /* --- DIZAYN --- */
         :root { --gold: #ffd700; --bg: #000000; --card-bg: rgba(255, 255, 255, 0.08); --text: #ffffff; }
         body { 
             background: black; 
@@ -28,7 +28,7 @@
         .league-badge { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #888; font-weight: 600; }
         #score { font-size: 52px; font-weight: 800; margin-top: 5px; text-shadow: 0 0 25px rgba(255,215,0,0.15); }
 
-        /* COIN AREA */
+        /* COIN */
         .coin-wrapper { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; position: relative; }
         .coin {
             width: 72vw; height: 72vw; max-width: 280px; max-height: 280px;
@@ -41,7 +41,7 @@
         .coin:active { transform: scale(0.95); }
         .coin-logo { font-size: 48px; font-weight: 900; font-family: serif; user-select: none; pointer-events: none; }
 
-        /* LEAGUE STYLES */
+        /* LEAGUES */
         .bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #8b4513); border-color: rgba(205,127,50,0.3); }
         .silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #7f8c8d); border-color: rgba(255,255,255,0.3); }
         .gold { background: radial-gradient(circle at 30% 30%, #ffd700, #ffaa00); border-color: rgba(255,215,0,0.3); box-shadow: 0 0 50px rgba(255,215,0,0.2); }
@@ -66,7 +66,7 @@
         .item-title { font-weight: 700; font-size: 15px; color: #fff; margin-bottom: 3px; white-space: nowrap; }
         .item-desc { font-size: 11px; color: #888; }
 
-        /* TUGMALAR */
+        /* BUTTONS */
         .btn-action { 
             background: var(--gold); border: none; min-width: 90px; height: 38px; 
             border-radius: 10px; font-weight: 700; cursor: pointer; color: #000; font-size: 13px;
@@ -77,7 +77,7 @@
         .btn-action.claim-ready { background: #2ecc71; color: white; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* NAVIGATSIYA */
+        /* NAVIGATION */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; padding-bottom: 15px; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; width: 20%; transition: 0.2s; font-weight: 500; }
         .nav-item.active { color: var(--gold); transform: translateY(-3px); font-weight: 700; }
@@ -177,7 +177,7 @@
                 <div style="font-size:48px; margin-bottom:10px">🎁</div>
                 <h3 style="margin:0; color:#fff">Invite & Earn</h3>
                 
-                <p style="color:#888; font-size:13px; margin:5px 0 15px 0" id="refRewardText">Get +5,000 coins</p>
+                <p style="color:#888; font-size:13px; margin:5px 0 15px 0" id="refRewardText">Get +50,000 coins</p>
                 
                 <button class="btn-action" style="width:100%; margin:0" id="inviteBtn">Copy Link 🔗</button>
             </div>
@@ -206,24 +206,25 @@
 
     <script>
         // ==========================================
-        // ⚙️ BOSHQARUV (CONFIG)
+        // ⚙️ BOSHQARUV (CONFIG) - TO'LIQ SOZLANGAN
         // ==========================================
         const CONFIG = {
-            botUserName: 'Fruzicoinbot', 
+            botUserName: 'Fruzicoinbot', // <-- BOT USERNAME (TO'G'RI)
             
             prices: {
-                bot: 1000000,      // Avto Bot narxi (1 Mln)
-                multitapBase: 500, // Multitap oshirish
-                energyBase: 500,   // Energy oshirish
-                taskReward: 50000, // Vazifa bonusi (50k)
-                referral: 50000    // DO'ST CHAQIRISH (50k qildim)
+                bot: 500000,      // 500K
+                multitapBase: 500, 
+                energyBase: 500,   
+                taskReward: 50000, // Vazifa: 50K
+                referral: 50000    // Referal: 50K
             },
 
+            // RANGLI VA IYSHLAYDIGAN LOGOLAR
             tasks: [
-                { id: 'tg', name: 'Telegram', link: 'https://t.me/Fruzicoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png' },
+                { id: 'tg', name: 'Telegram', link: 'https://t.me/FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png' },
                 { id: 'yt', name: 'YouTube', link: 'https://youtube.com/@FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png' },
-                { id: 'tt', name: 'TikTok', link: 'https://tiktok.com/@FruziCoin', img: 'https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png' },
-                { id: 'ig', name: 'Instagram', link: 'https://instagram.com/Fruzi_coin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png' },
+                { id: 'tt', name: 'TikTok', link: 'https://tiktok.com/@FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Ionicons_logo-tiktok.svg/1024px-Ionicons_logo-tiktok.svg.png' },
+                { id: 'ig', name: 'Instagram', link: 'https://instagram.com/Fruzi_Coin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png' },
                 { id: 'tw', name: 'Twitter (X)', link: 'https://twitter.com/FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png' }
             ]
         };
@@ -234,24 +235,40 @@
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: 123, first_name: "Gamer" };
+        const user = tg.initDataUnsafe.user || { id: 777, first_name: "Test" };
         const startParam = tg.initDataUnsafe.start_param;
 
         let state = { balance: 0, energy: 1000, energy_max: 1000, multitap: 1, energy_limit: 1, has_bot: false, completedTasks: {}, lastDaily: null };
 
         async function init() {
             try {
-                // Referal textni CONFIG ga qarab yangilash
+                // Referal textni yangilash
                 document.getElementById('refRewardText').innerText = `Get +${CONFIG.prices.referral.toLocaleString()} coins per friend`;
 
                 let { data: u, error } = await sb.from('users').select('*').eq('id', user.id).single();
+                
                 if (error && error.code === 'PGRST116') {
+                    // Yangi User
                     let refId = (startParam && startParam.startsWith('ref_')) ? parseInt(startParam.split('_')[1]) : null;
                     let startBal = refId ? CONFIG.prices.referral : 0;
-                    await sb.from('users').insert([{ id: user.id, username: user.username, first_name: user.first_name, balance: startBal, invited_by: refId }]);
-                    if(refId) await sb.rpc('increment_balance', { user_id: refId, amount: CONFIG.prices.referral });
+                    
+                    // Userni yaratish
+                    await sb.from('users').insert([{ 
+                        id: user.id, 
+                        username: user.username, 
+                        first_name: user.first_name, 
+                        balance: startBal, 
+                        invited_by: refId 
+                    }]);
+                    
+                    // Referal bonusi (Agar refId bo'lsa)
+                    if(refId && refId !== user.id) {
+                        await sb.rpc('increment_balance', { user_id: refId, amount: CONFIG.prices.referral });
+                    }
+                    
                     state.balance = startBal;
                 } else if (u) {
+                    // Eski User
                     state = { balance: u.balance, energy: u.energy, energy_max: u.energy_max, multitap: u.multitap_level, energy_limit: u.energy_limit_level, has_bot: u.has_auto_bot, completedTasks: u.completed_tasks || {}, lastDaily: u.last_daily_claim };
                     let diff = Math.floor((Date.now() - new Date(u.last_active).getTime())/1000);
                     state.energy = Math.min(state.energy_max, state.energy + diff);
@@ -260,7 +277,7 @@
                 updateUI(); renderTasks(); checkLeague(); checkDaily();
                 document.getElementById('loadingScreen').style.display = 'none'; document.getElementById('gameContainer').style.display = 'block';
                 setInterval(save, 2000);
-            } catch (e) { document.getElementById('errorText').innerText = "Internet xatosi!"; document.getElementById('errorText').style.display = 'block'; }
+            } catch (e) { document.getElementById('errorText').innerText = "Xato: " + e.message; document.getElementById('errorText').style.display = 'block'; }
         }
 
         async function save() { await sb.from('users').upsert({ id: user.id, balance: state.balance, energy: state.energy, energy_max: state.energy_max, multitap_level: state.multitap, energy_limit_level: state.energy_limit, has_auto_bot: state.has_bot, completed_tasks: state.completedTasks, last_daily_claim: state.lastDaily, last_active: new Date().toISOString() }); }
@@ -279,7 +296,7 @@
             else { el.classList.add('diamond'); name.innerText = "Diamond"; name.style.color = "#00ffff"; }
         }
 
-        // --- TASK SYSTEM WITH TIMER ---
+        // --- 15 SONYALI HIMOYALI TASKS ---
         function renderTasks() {
             const list = document.getElementById('tasksList'); list.innerHTML = '';
             CONFIG.tasks.forEach(t => {
@@ -305,29 +322,19 @@
         window.startTask = function(id) {
             let task = CONFIG.tasks.find(t=>t.id===id);
             let btn = document.getElementById(`btn-${id}`);
-            
-            // 1. Linkni ochish
             window.open(task.link, '_blank');
-            
-            // 2. Timerni boshlash
             btn.disabled = true;
             let timeLeft = 15;
             btn.innerText = `Wait ${timeLeft}s`;
-            
             let timer = setInterval(() => {
                 timeLeft--;
                 btn.innerText = `Wait ${timeLeft}s`;
-                
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     btn.innerText = "Claim";
                     btn.classList.add("claim-ready");
                     btn.disabled = false;
-                    
-                    // 3. Tugmani "Claim" rejimiga o'tkazish
-                    btn.onclick = function() {
-                        claimTask(id, btn);
-                    };
+                    btn.onclick = function() { claimTask(id, btn); };
                 }
             }, 1000);
         }
@@ -337,9 +344,7 @@
             state.balance += CONFIG.prices.taskReward;
             state.completedTasks[id] = true;
             tg.HapticFeedback.notificationOccurred('success');
-            updateUI();
-            save();
-            renderTasks(); // Tugmani "Done" ga aylantirish
+            updateUI(); save(); renderTasks();
         }
 
         function updateUI() {
