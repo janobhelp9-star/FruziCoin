@@ -7,84 +7,104 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* --- DIZAYN --- */
-        :root { --gold: #ffd700; --bg: #0f0f0f; --text: #ffffff; }
-        body { background: radial-gradient(circle at center, #1f1f1f 0%, #000000 100%); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; height: 100vh; display: flex; flex-direction: column; }
+        /* --- ASOSIY STIL --- */
+        :root { --gold: #ffd700; --bg: #000000; --card-bg: rgba(255, 255, 255, 0.08); --text: #ffffff; }
+        body { 
+            background: black; 
+            background-image: radial-gradient(circle at 50% 30%, #1f1f1f 0%, #000000 70%);
+            color: var(--text); 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; overflow: hidden; user-select: none; -webkit-tap-highlight-color: transparent; 
+            height: 100vh; display: flex; flex-direction: column; 
+        }
 
         /* LOADING */
         #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .loader { border: 4px solid #333; border-top: 4px solid var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .loader { border: 3px solid #333; border-top: 3px solid var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* HEADER & SCORE */
-        .header { text-align: center; margin-top: 20px; }
-        .league-badge { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 5px; }
-        #score { font-size: 48px; font-weight: 800; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        /* HEADER */
+        .header { text-align: center; margin-top: 20px; padding-bottom: 10px; }
+        .league-badge { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #888; font-weight: 600; }
+        #score { font-size: 52px; font-weight: 800; margin-top: 5px; text-shadow: 0 0 25px rgba(255,215,0,0.15); }
 
-        /* COIN */
+        /* COIN AREA */
         .coin-wrapper { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; position: relative; }
         .coin {
-            width: 75vw; height: 75vw; max-width: 290px; max-height: 290px;
+            width: 72vw; height: 72vw; max-width: 280px; max-height: 280px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            position: relative; transition: transform 0.05s; cursor: pointer;
-            box-shadow: 0 0 80px rgba(255,255,255,0.1); border: 8px solid rgba(255,255,255,0.1);
+            position: relative; transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer;
+            box-shadow: 0 0 60px rgba(255,255,255,0.05); 
+            border: 8px solid rgba(255,255,255,0.05);
         }
-        .coin:active { transform: scale(0.94); }
-        .coin-logo { font-size: 50px; font-weight: 900; font-family: serif; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .coin:active { transform: scale(0.95); }
+        .coin-logo { font-size: 48px; font-weight: 900; font-family: serif; user-select: none; pointer-events: none; }
 
-        /* LEAGUE COLORS */
-        .bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #8b4513); border-color: #8b4513; }
-        .silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #a9a9a9); border-color: #a9a9a9; }
-        .gold { background: radial-gradient(circle at 30% 30%, #ffd700, #ffaa00); border-color: #b8860b; }
-        .diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #0088ff); border-color: #0055aa; }
+        /* LEAGUE STYLES */
+        .bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #8b4513); border-color: rgba(205,127,50,0.3); }
+        .silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #7f8c8d); border-color: rgba(255,255,255,0.3); }
+        .gold { background: radial-gradient(circle at 30% 30%, #ffd700, #ffaa00); border-color: rgba(255,215,0,0.3); box-shadow: 0 0 50px rgba(255,215,0,0.2); }
+        .diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #0088ff); border-color: rgba(0,255,255,0.3); box-shadow: 0 0 50px rgba(0,255,255,0.2); }
 
-        /* LIST ITEMS (Standard & Uniform) */
+        /* LIST ITEMS */
+        .list-container { width: 100%; padding: 0 5px; box-sizing: border-box; }
         .list-item { 
-            background: rgba(255,255,255,0.08); padding: 12px 15px; margin-bottom: 10px; 
-            border-radius: 16px; display: flex; justify-content: space-between; align-items: center; 
-            border: 1px solid rgba(255,255,255,0.05); min-height: 56px; 
+            background: var(--card-bg); backdrop-filter: blur(10px);
+            padding: 0 16px; margin-bottom: 12px; border-radius: 16px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border: 1px solid rgba(255,255,255,0.05); height: 70px; box-sizing: border-box;
+            transition: transform 0.1s;
         }
-        .item-left { display: flex; align-items: center; gap: 12px; flex-grow: 1; }
-        .task-img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
-        .boost-icon { font-size: 28px; width: 32px; text-align: center; }
-        
-        .btn-action { 
-            background: var(--gold); border: none; padding: 0; width: 90px; height: 36px; 
-            border-radius: 10px; font-weight: bold; cursor: pointer; color: black; 
-            display: flex; align-items: center; justify-content: center; font-size: 14px;
-        }
-        .btn-action:disabled { background: #333; color: #00ff00; cursor: default; border: 1px solid #444; }
+        .list-item:active { transform: scale(0.98); background: rgba(255,255,255,0.12); }
+        .list-item.special { border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
 
-        /* DAILY MODAL */
-        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; display:none; justify-content:center; align-items:center; }
-        .modal-content { background:#222; padding:30px; border-radius:20px; text-align:center; width:80%; border:1px solid var(--gold); }
-        
-        /* PAGES & NAV */
+        .item-left { display: flex; align-items: center; gap: 14px; flex-grow: 1; overflow: hidden; }
+        .item-icon-box { width: 40px; height: 40px; background: rgba(0,0,0,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .task-img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; }
+        .item-info { display: flex; flex-direction: column; justify-content: center; }
+        .item-title { font-weight: 700; font-size: 15px; color: #fff; margin-bottom: 3px; white-space: nowrap; }
+        .item-desc { font-size: 11px; color: #888; }
+
+        /* TUGMALAR */
+        .btn-action { 
+            background: var(--gold); border: none; min-width: 90px; height: 38px; 
+            border-radius: 10px; font-weight: 700; cursor: pointer; color: #000; font-size: 13px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2); flex-shrink: 0; margin-left: 10px;
+        }
+        .btn-action:disabled { background: #2a2a2a; color: #888; border: 1px solid #333; box-shadow: none; cursor: not-allowed; }
+        .btn-action.claim-ready { background: #2ecc71; color: white; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* NAVIGATSIYA */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; padding-bottom: 15px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; width: 20%; transition: 0.2s; font-weight: 500; }
+        .nav-item.active { color: var(--gold); transform: translateY(-3px); font-weight: 700; }
+        .nav-icon { font-size: 24px; margin-bottom: 5px; }
+
         .page { display: none; flex-direction: column; height: 100%; width: 100%; padding: 20px 20px 100px 20px; box-sizing: border-box; align-items: center; overflow-y: auto; }
         .page.active { display: flex; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: rgba(20, 20, 20, 0.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #333; z-index: 1000; padding-bottom: 15px; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 11px; width: 20%; transition: 0.2s; }
-        .nav-item.active { color: var(--gold); transform: translateY(-5px); }
-        .nav-icon { font-size: 24px; margin-bottom: 5px; }
-        
-        .float-text { position: absolute; color: white; font-weight: bold; font-size: 32px; pointer-events: none; animation: floatUp 0.8s forwards; z-index: 999; }
-        @keyframes floatUp { to { transform: translateY(-120px); opacity: 0; } }
+        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; display:none; justify-content:center; align-items:center; backdrop-filter: blur(5px); }
+        .modal-content { background:#151515; padding:30px; border-radius:25px; text-align:center; width:80%; border:1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .float-text { position: absolute; color: white; font-weight: 800; font-size: 32px; pointer-events: none; animation: floatUp 0.8s forwards; z-index: 999; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        @keyframes floatUp { to { transform: translateY(-100px) scale(1.1); opacity: 0; } }
     </style>
 </head>
 <body>
 
     <div id="loadingScreen">
         <div class="loader"></div>
-        <div style="color:var(--gold)">Connecting...</div>
+        <div style="color:#666; font-size:12px">Connecting...</div>
         <div id="errorText" style="color:red; display:none; margin-top:10px; font-size:12px"></div>
     </div>
 
     <div class="modal" id="dailyModal">
         <div class="modal-content">
-            <div style="font-size:50px">📅</div>
-            <h2 style="color:var(--gold)">Daily Reward</h2>
-            <p>Come back daily!</p>
-            <h1>+5,000</h1>
+            <div style="font-size:60px; margin-bottom:15px">📅</div>
+            <h2 style="color:#fff; margin:0">Daily Reward</h2>
+            <p style="color:#888; margin: 10px 0 20px 0">You've got a bonus!</p>
+            <h1 style="color:var(--gold); font-size:40px; margin:0 0 20px 0">+5,000</h1>
             <button class="btn-action" onclick="claimDaily()" style="width:100%">Claim</button>
         </div>
     </div>
@@ -103,61 +123,76 @@
                 </div>
             </div>
 
-            <div style="background:rgba(255,255,255,0.1); padding:10px 25px; border-radius:30px; margin-bottom:20px">
-                ⚡ <span id="energyVal">1000</span> / <span id="energyMaxVal">1000</span>
+            <div style="background:rgba(255,255,255,0.08); padding:8px 20px; border-radius:30px; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+                <span style="font-size:18px">⚡</span> 
+                <span id="energyVal" style="font-weight:700">1000</span> <span style="color:#666">/</span> <span id="energyMaxVal">1000</span>
             </div>
         </div>
 
         <div class="page" id="boostPage">
-            <h2 style="color:var(--gold)">🚀 Boosters</h2>
-            
-            <div class="list-item" style="border-color:var(--gold);">
-                <div class="item-left">
-                    <div class="boost-icon">🤖</div>
-                    <div><b style="color:var(--gold)">Auto Bot</b><br><span style="font-size:11px; color:#aaa">Offline mining</span></div>
+            <h2 style="color:var(--gold); margin-bottom:20px">Boosters</h2>
+            <div class="list-container">
+                <div class="list-item special">
+                    <div class="item-left">
+                        <div class="item-icon-box" style="background:transparent; font-size:28px">🤖</div>
+                        <div class="item-info">
+                            <span class="item-title">Auto Bot</span>
+                            <span class="item-desc">Mines while offline</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" id="buyBotBtn">1M</button>
                 </div>
-                <button class="btn-action" id="buyBotBtn">1,000,000</button>
-            </div>
-
-            <div class="list-item">
-                <div class="item-left">
-                    <div class="boost-icon">👆</div>
-                    <div><b>Multitap</b><br><span style="font-size:11px; color:#888" id="multiInfo">Lvl 1</span></div>
+                <div class="list-item">
+                    <div class="item-left">
+                        <div class="item-icon-box">👆</div>
+                        <div class="item-info">
+                            <span class="item-title">Multitap</span>
+                            <span class="item-desc" id="multiInfo">Lvl 1</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" id="buyMultiBtn">Up</button>
                 </div>
-                <button class="btn-action" id="buyMultiBtn">Up</button>
-            </div>
-
-            <div class="list-item">
-                <div class="item-left">
-                    <div class="boost-icon">🔋</div>
-                    <div><b>Energy Limit</b><br><span style="font-size:11px; color:#888" id="energyInfo">Lvl 1</span></div>
+                <div class="list-item">
+                    <div class="item-left">
+                        <div class="item-icon-box">🔋</div>
+                        <div class="item-info">
+                            <span class="item-title">Energy Limit</span>
+                            <span class="item-desc" id="energyInfo">Lvl 1</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" id="buyEnergyBtn">Up</button>
                 </div>
-                <button class="btn-action" id="buyEnergyBtn">Up</button>
             </div>
         </div>
 
         <div class="page" id="tasksPage">
-            <h2 style="color:var(--gold)">📋 Tasks</h2>
-            <p style="color:#666; font-size:12px; margin-top:-10px">Earn coins instantly</p>
-            <div id="tasksList" style="width:100%"></div>
+            <h2 style="color:var(--gold); margin-bottom:5px">Tasks</h2>
+            <p style="color:#666; font-size:12px; margin-bottom:20px">Click START & Wait 15s to claim</p>
+            <div id="tasksList" class="list-container"></div>
         </div>
 
         <div class="page" id="friendsPage">
-            <h2 style="color:var(--gold)">👥 Invite Friends</h2>
-            <div style="background:#1c1c1e; padding:20px; border-radius:15px; text-align:center; width:100%; margin-bottom:20px">
-                <div style="font-size:40px">🎁</div>
-                <p style="color:#aaa">+5,000 coins per friend</p>
-                <button class="btn-action" style="width:100%" id="inviteBtn">Copy Link 🔗</button>
+            <h2 style="color:var(--gold); margin-bottom:20px">Friends</h2>
+            <div style="background: linear-gradient(135deg, #1e1e24 0%, #151515 100%); padding:25px; border-radius:20px; text-align:center; width:100%; box-sizing:border-box; border:1px solid rgba(255,255,255,0.05); margin-bottom:20px">
+                <div style="font-size:48px; margin-bottom:10px">🎁</div>
+                <h3 style="margin:0; color:#fff">Invite & Earn</h3>
+                
+                <p style="color:#888; font-size:13px; margin:5px 0 15px 0" id="refRewardText">Get +5,000 coins</p>
+                
+                <button class="btn-action" style="width:100%; margin:0" id="inviteBtn">Copy Link 🔗</button>
             </div>
-            <div style="width:100%">
-                <h4 style="color:#666; margin-bottom:10px">Your Friends:</h4>
+            
+            <div class="list-container">
+                <div style="font-size:12px; color:#666; margin-bottom:10px; padding-left:5px">YOUR FRIENDS</div>
                 <div id="friendsList"></div>
             </div>
         </div>
 
         <div class="page" id="topPage">
-            <h2 style="color:var(--gold)">🏆 Leaderboard</h2>
-            <div id="leaderboardList" style="width:100%">Loading...</div>
+            <h2 style="color:var(--gold); margin-bottom:20px">Leaderboard</h2>
+            <div id="leaderboardList" class="list-container">
+                <div style="text-align:center; color:#666">Loading...</div>
+            </div>
         </div>
 
         <nav class="bottom-nav">
@@ -171,50 +206,27 @@
 
     <script>
         // ==========================================
-        // ⚙️ BOSHQARUV PULTI (CONFIG)
+        // ⚙️ BOSHQARUV (CONFIG)
         // ==========================================
         const CONFIG = {
-            botUserName: 'Fruzicoinbot', // <-- BOT NOMINI YOZING
+            botUserName: 'Fruzicoinbot', 
             
-            // Limitlar va Narxlar (Shu yerdan o'zgartirasiz)
             prices: {
-                bot: 500000,      // Avto Bot narxi (1 mln)
-                multitapBase: 500, // Multitap narxi
-                energyBase: 500,   // Energy narxi
+                bot: 1000000,      // Avto Bot narxi (1 Mln)
+                multitapBase: 500, // Multitap oshirish
+                energyBase: 500,   // Energy oshirish
                 taskReward: 50000, // Vazifa bonusi (50k)
-                referral: 50000     // Do'st chaqirsa (50k)
+                referral: 50000    // DO'ST CHAQIRISH (50k qildim)
             },
 
-            // Ijtimoiy tarmoq logolari va linklari
             tasks: [
-                { 
-                    id: 'tg', name: 'Telegram', 
-                    link: 'https://t.me/FruziCoin_Channel', 
-                    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png' 
-                },
-                { 
-                    id: 'yt', name: 'YouTube', 
-                    link: 'https://youtube.com/@FruziCoin', 
-                    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png' 
-                },
-                { 
-                    id: 'tt', name: 'TikTok', 
-                    link: 'https://tiktok.com/@FruziCoin', 
-                    img: 'https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png' 
-                },
-                { 
-                    id: 'ig', name: 'Instagram', 
-                    link: 'https://instagram.com/FruziCoin', 
-                    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png' 
-                },
-                { 
-                    id: 'tw', name: 'Twitter (X)', 
-                    link: 'https://twitter.com/FruziCoin', 
-                    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png' 
-                }
+                { id: 'tg', name: 'Telegram', link: 'https://t.me/Fruzicoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png' },
+                { id: 'yt', name: 'YouTube', link: 'https://youtube.com/@FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png' },
+                { id: 'tt', name: 'TikTok', link: 'https://tiktok.com/@FruziCoin', img: 'https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png' },
+                { id: 'ig', name: 'Instagram', link: 'https://instagram.com/Fruzi_coin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png' },
+                { id: 'tw', name: 'Twitter (X)', link: 'https://twitter.com/FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png' }
             ]
         };
-        // ==========================================
 
         const SUPABASE_URL = 'https://dwotktqghawusjbmvvak.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3b3RrdHFnaGF3dXNqYm12dmFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MDA5NjUsImV4cCI6MjA4NDM3Njk2NX0.AgSlVmVUksfSuQCHvSXyHlEzEnZ8N5aZlE1fIk0YEH4';
@@ -222,13 +234,16 @@
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: 111, first_name: "User" };
+        const user = tg.initDataUnsafe.user || { id: 123, first_name: "Gamer" };
         const startParam = tg.initDataUnsafe.start_param;
 
         let state = { balance: 0, energy: 1000, energy_max: 1000, multitap: 1, energy_limit: 1, has_bot: false, completedTasks: {}, lastDaily: null };
 
         async function init() {
             try {
+                // Referal textni CONFIG ga qarab yangilash
+                document.getElementById('refRewardText').innerText = `Get +${CONFIG.prices.referral.toLocaleString()} coins per friend`;
+
                 let { data: u, error } = await sb.from('users').select('*').eq('id', user.id).single();
                 if (error && error.code === 'PGRST116') {
                     let refId = (startParam && startParam.startsWith('ref_')) ? parseInt(startParam.split('_')[1]) : null;
@@ -240,12 +255,12 @@
                     state = { balance: u.balance, energy: u.energy, energy_max: u.energy_max, multitap: u.multitap_level, energy_limit: u.energy_limit_level, has_bot: u.has_auto_bot, completedTasks: u.completed_tasks || {}, lastDaily: u.last_daily_claim };
                     let diff = Math.floor((Date.now() - new Date(u.last_active).getTime())/1000);
                     state.energy = Math.min(state.energy_max, state.energy + diff);
-                    if(state.has_bot && diff > 60) { state.balance += diff; alert(`🤖 Auto Bot mined +${diff} coins!`); }
+                    if(state.has_bot && diff > 60) { state.balance += diff; alert(`🤖 Auto Bot mined +${diff.toLocaleString()} coins!`); }
                 }
                 updateUI(); renderTasks(); checkLeague(); checkDaily();
                 document.getElementById('loadingScreen').style.display = 'none'; document.getElementById('gameContainer').style.display = 'block';
                 setInterval(save, 2000);
-            } catch (e) { document.getElementById('errorText').innerText = e.message; document.getElementById('errorText').style.display = 'block'; }
+            } catch (e) { document.getElementById('errorText').innerText = "Internet xatosi!"; document.getElementById('errorText').style.display = 'block'; }
         }
 
         async function save() { await sb.from('users').upsert({ id: user.id, balance: state.balance, energy: state.energy, energy_max: state.energy_max, multitap_level: state.multitap, energy_limit_level: state.energy_limit, has_auto_bot: state.has_bot, completed_tasks: state.completedTasks, last_daily_claim: state.lastDaily, last_active: new Date().toISOString() }); }
@@ -258,38 +273,89 @@
 
         function checkLeague() {
             let el = document.getElementById('coinBtn'), name = document.getElementById('leagueName'); el.classList.remove('bronze', 'silver', 'gold', 'diamond');
-            if (state.balance < 5000) { el.classList.add('bronze'); name.innerText = "Bronze League"; name.style.color = "#cd7f32"; }
-            else if (state.balance < 50000) { el.classList.add('silver'); name.innerText = "Silver League"; name.style.color = "#e0e0e0"; }
-            else if (state.balance < 1000000) { el.classList.add('gold'); name.innerText = "Gold League"; name.style.color = "#ffd700"; }
-            else { el.classList.add('diamond'); name.innerText = "Diamond League"; name.style.color = "#00ffff"; }
+            if (state.balance < 5000) { el.classList.add('bronze'); name.innerText = "Bronze"; name.style.color = "#cd7f32"; }
+            else if (state.balance < 50000) { el.classList.add('silver'); name.innerText = "Silver"; name.style.color = "#e0e0e0"; }
+            else if (state.balance < 1000000) { el.classList.add('gold'); name.innerText = "Gold"; name.style.color = "#ffd700"; }
+            else { el.classList.add('diamond'); name.innerText = "Diamond"; name.style.color = "#00ffff"; }
         }
 
+        // --- TASK SYSTEM WITH TIMER ---
         function renderTasks() {
             const list = document.getElementById('tasksList'); list.innerHTML = '';
             CONFIG.tasks.forEach(t => {
                 let isDone = state.completedTasks[t.id];
-                let btnHtml = isDone ? `<button class="btn-action" disabled>Done ✅</button>` : `<button class="btn-action" onclick="doTask('${t.id}', this)">Start</button>`;
-                list.innerHTML += `<div class="list-item"><div class="item-left"><img src="${t.img}" class="task-img"><b>${t.name}</b></div>${btnHtml}</div>`;
+                let btnHtml = isDone 
+                    ? `<button class="btn-action" disabled style="width:100px; color:#00ff00">Done ✅</button>` 
+                    : `<button class="btn-action" id="btn-${t.id}" onclick="startTask('${t.id}')">Start</button>`;
+                
+                list.innerHTML += `
+                <div class="list-item">
+                    <div class="item-left">
+                        <img src="${t.img}" class="task-img">
+                        <div class="item-info">
+                            <span class="item-title">${t.name}</span>
+                            <span class="item-desc">+${(CONFIG.prices.taskReward/1000).toFixed(0)}k coin</span>
+                        </div>
+                    </div>
+                    ${btnHtml}
+                </div>`;
             });
         }
-        window.doTask = function(id, btn) { 
-            if(state.completedTasks[id]) return; 
+
+        window.startTask = function(id) {
             let task = CONFIG.tasks.find(t=>t.id===id);
-            window.open(task.link, '_blank'); 
-            btn.disabled=true; btn.innerText="Wait..."; 
-            setTimeout(() => { state.balance += CONFIG.prices.taskReward; state.completedTasks[id] = true; updateUI(); save(); renderTasks(); }, 5000); 
+            let btn = document.getElementById(`btn-${id}`);
+            
+            // 1. Linkni ochish
+            window.open(task.link, '_blank');
+            
+            // 2. Timerni boshlash
+            btn.disabled = true;
+            let timeLeft = 15;
+            btn.innerText = `Wait ${timeLeft}s`;
+            
+            let timer = setInterval(() => {
+                timeLeft--;
+                btn.innerText = `Wait ${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    btn.innerText = "Claim";
+                    btn.classList.add("claim-ready");
+                    btn.disabled = false;
+                    
+                    // 3. Tugmani "Claim" rejimiga o'tkazish
+                    btn.onclick = function() {
+                        claimTask(id, btn);
+                    };
+                }
+            }, 1000);
+        }
+
+        function claimTask(id, btn) {
+            if(state.completedTasks[id]) return;
+            state.balance += CONFIG.prices.taskReward;
+            state.completedTasks[id] = true;
+            tg.HapticFeedback.notificationOccurred('success');
+            updateUI();
+            save();
+            renderTasks(); // Tugmani "Done" ga aylantirish
         }
 
         function updateUI() {
-            document.getElementById('score').innerText = state.balance.toLocaleString(); document.getElementById('energyVal').innerText = Math.floor(state.energy); document.getElementById('energyMaxVal').innerText = state.energy_max;
+            document.getElementById('score').innerText = state.balance.toLocaleString(); 
+            document.getElementById('energyVal').innerText = Math.floor(state.energy); 
+            document.getElementById('energyMaxVal').innerText = state.energy_max;
             
-            // Narxlar CONFIG dan olinadi
-            document.getElementById('buyMultiBtn').innerText = `Up (${(state.multitap * CONFIG.prices.multitapBase).toLocaleString()})`; document.getElementById('multiInfo').innerText = `Lvl ${state.multitap}`;
-            document.getElementById('buyEnergyBtn').innerText = `Up (${(state.energy_limit * CONFIG.prices.energyBase).toLocaleString()})`; document.getElementById('energyInfo').innerText = `Lvl ${state.energy_limit}`;
+            document.getElementById('buyMultiBtn').innerText = `Up (${(state.multitap * CONFIG.prices.multitapBase).toLocaleString()})`; 
+            document.getElementById('multiInfo').innerText = `Lvl ${state.multitap}`;
+            
+            document.getElementById('buyEnergyBtn').innerText = `Up (${(state.energy_limit * CONFIG.prices.energyBase).toLocaleString()})`; 
+            document.getElementById('energyInfo').innerText = `Lvl ${state.energy_limit}`;
             
             let botBtn = document.getElementById('buyBotBtn'); 
-            if(state.has_bot) { botBtn.innerText = "Active ✅"; botBtn.disabled = true; botBtn.style.background = "#333"; botBtn.style.color = "#00ff00"; } 
-            else { botBtn.innerText = CONFIG.prices.bot.toLocaleString(); }
+            if(state.has_bot) { botBtn.innerText = "Active"; botBtn.disabled = true; botBtn.style.color = "#00ff00"; } 
+            else { botBtn.innerText = (CONFIG.prices.bot / 1000000) + "M"; }
             checkLeague();
         }
 
@@ -300,13 +366,27 @@
         function showFloat(x, y, t) { let el = document.createElement('div'); el.className='float-text'; el.innerText=t; el.style.left=(x-20)+'px'; el.style.top=(y-50)+'px'; document.body.appendChild(el); setTimeout(()=>el.remove(), 800); }
 
         window.openPage = function(id, btn) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); btn.classList.add('active'); if(id === 'topPage') loadTop(); if(id === 'friendsPage') loadFriends(); }
-        async function loadFriends() { let list = document.getElementById('friendsList'); list.innerHTML = 'Loading...'; let { data } = await sb.from('users').select('first_name, balance').eq('invited_by', user.id); list.innerHTML = ''; if(data && data.length) data.forEach(f => list.innerHTML += `<div style="display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #333"><span>${f.first_name}</span><span style="color:var(--gold)">${f.balance.toLocaleString()}</span></div>`); else list.innerHTML = '<div style="text-align:center;padding:20px;color:#666">No friends yet</div>'; }
-        async function loadTop() { let list = document.getElementById('leaderboardList'); list.innerHTML = 'Loading...'; let { data } = await sb.from('users').select('first_name, balance').order('balance', {ascending:false}).limit(10); list.innerHTML = ''; if(data) data.forEach((p, i) => list.innerHTML += `<div class="list-item"><b>#${i+1} ${p.first_name}</b><span>${p.balance.toLocaleString()}</span></div>`); }
-        document.getElementById('inviteBtn').addEventListener('click', () => { navigator.clipboard.writeText(`https://t.me/${CONFIG.botUserName}?start=ref_${user.id}`); alert("Invite Link Copied!"); });
         
+        async function loadFriends() { 
+            let list = document.getElementById('friendsList'); list.innerHTML = '<div style="text-align:center; color:#666">Loading...</div>'; 
+            let { data } = await sb.from('users').select('first_name, balance').eq('invited_by', user.id); 
+            list.innerHTML = ''; 
+            if(data && data.length) data.forEach(f => list.innerHTML += `<div class="list-item" style="height:50px"><div class="item-left"><span style="font-size:20px">👤</span><span class="item-title">${f.first_name}</span></div><span style="color:var(--gold); font-weight:bold">${f.balance.toLocaleString()}</span></div>`); 
+            else list.innerHTML = '<div style="text-align:center;padding:20px;color:#666">No friends yet</div>'; 
+        }
+        
+        async function loadTop() { 
+            let list = document.getElementById('leaderboardList'); list.innerHTML = '<div style="text-align:center; color:#666">Loading...</div>'; 
+            let { data } = await sb.from('users').select('first_name, balance').order('balance', {ascending:false}).limit(10); 
+            list.innerHTML = ''; 
+            if(data) data.forEach((p, i) => list.innerHTML += `<div class="list-item" style="height:50px"><div class="item-left"><b style="color:#666; width:20px">#${i+1}</b><span class="item-title">${p.first_name}</span></div><span style="color:var(--gold); font-weight:bold">${p.balance.toLocaleString()}</span></div>`); 
+        }
+        
+        document.getElementById('inviteBtn').addEventListener('click', () => { navigator.clipboard.writeText(`https://t.me/${CONFIG.botUserName}?start=ref_${user.id}`); alert("Invite Link Copied!"); });
         document.getElementById('buyBotBtn').addEventListener('click', () => { if(state.balance >= CONFIG.prices.bot && !state.has_bot) { state.balance -= CONFIG.prices.bot; state.has_bot = true; updateUI(); save(); } });
         document.getElementById('buyMultiBtn').addEventListener('click', () => { let p = state.multitap * CONFIG.prices.multitapBase; if(state.balance >= p) { state.balance -= p; state.multitap++; updateUI(); save(); } });
         document.getElementById('buyEnergyBtn').addEventListener('click', () => { let p = state.energy_limit * CONFIG.prices.energyBase; if(state.balance >= p) { state.balance -= p; state.energy_limit++; state.energy_max += 500; updateUI(); save(); } });
+        
         setInterval(() => { if(state.energy < state.energy_max) { state.energy++; updateUI(); } }, 1000); init();
     </script>
 </body>
