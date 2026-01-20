@@ -18,7 +18,7 @@
             height: 100vh; display: flex; flex-direction: column; 
         }
 
-        /* LOADING EKRAN */
+        /* LOADING SCREEN */
         #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .loader { border: 3px solid #333; border-top: 3px solid var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -93,7 +93,7 @@
 
     <div id="loadingScreen">
         <div class="loader"></div>
-        <div style="color:#666; font-size:12px">Fruzi Coin yuklanmoqda...</div>
+        <div style="color:#666; font-size:12px">Loading Fruzi Coin...</div>
         <div id="errorText" style="color:red; display:none; margin-top:10px; font-size:12px"></div>
     </div>
 
@@ -125,7 +125,7 @@
                         <div class="item-icon-box" style="background:transparent; font-size:28px">🤖</div>
                         <div class="item-info">
                             <span class="item-title">Auto Bot</span>
-                            <span class="item-desc">Siz uxlaganda ishlaydi</span>
+                            <span class="item-desc">Mines while you sleep</span>
                         </div>
                     </div>
                     <button class="btn-action" id="buyBotBtn">1M</button>
@@ -155,7 +155,7 @@
 
         <div class="page" id="tasksPage">
             <h2 style="color:var(--gold); margin-bottom:5px">Tasks</h2>
-            <p style="color:#666; font-size:12px; margin-bottom:20px">Bosing, 15s kuting va pulni oling</p>
+            <p style="color:#666; font-size:12px; margin-bottom:20px">Click START & Wait 15s to claim</p>
             <div id="tasksList" class="list-container"></div>
         </div>
 
@@ -167,11 +167,11 @@
                 
                 <p style="color:#888; font-size:13px; margin:5px 0 15px 0" id="refRewardText">Get +50,000 coins</p>
                 
-                <button class="btn-action" style="width:100%; margin:0" id="inviteBtn">Linkdan nusxa olish 🔗</button>
+                <button class="btn-action" style="width:100%; margin:0" id="inviteBtn">Copy Link 🔗</button>
             </div>
             
             <div class="list-container">
-                <div style="font-size:12px; color:#666; margin-bottom:10px; padding-left:5px">SIZNING DO'STLARINGIZ:</div>
+                <div style="font-size:12px; color:#666; margin-bottom:10px; padding-left:5px">YOUR FRIENDS:</div>
                 <div id="friendsList"></div>
             </div>
         </div>
@@ -179,7 +179,7 @@
         <div class="page" id="topPage">
             <h2 style="color:var(--gold); margin-bottom:20px">Leaderboard</h2>
             <div id="leaderboardList" class="list-container">
-                <div style="text-align:center; color:#666">Yuklanmoqda...</div>
+                <div style="text-align:center; color:#666">Loading...</div>
             </div>
         </div>
 
@@ -197,25 +197,25 @@
         // ⚙️ SOZLAMALAR (CONFIG)
         // ==========================================
         const CONFIG = {
-            botUserName: 'Fruzicoinbot', // <-- BOT USERNAME (Fruzicoinbot)
+            botUserName: 'Fruzi_original_bot', // <-- BOT USERNAME
             
             prices: {
-                bot: 500000,      // 05 Million
+                bot: 1000000,      
                 multitapBase: 500, 
                 energyBase: 500,   
                 taskReward: 50000, 
-                referral: 50000    // <-- 50K REFERAL
+                referral: 50000    // 50K REFERAL
             },
 
-            // LOGOLAR (TIKTOK YANGILANDI)
+            // LOGOLAR (TIKTOK YANGILANDI - QORA LOGO)
             tasks: [
                 { id: 'tg', name: 'Telegram', link: 'https://t.me/FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png' },
                 { id: 'yt', name: 'YouTube', link: 'https://youtube.com/@FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png' },
                 
-                // YANGI TIKTOK RASM
-                { id: 'tt', name: 'TikTok', link: 'https://tiktok.com/@FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/1024px-TikTok_logo.svg.png' },
+                // YANGI ISHONCHLI TIKTOK RASM
+                { id: 'tt', name: 'TikTok', link: 'https://tiktok.com/@FruziCoin', img: 'https://cdn-icons-png.flaticon.com/512/3046/3046126.png' },
                 
-                { id: 'ig', name: 'Instagram', link: 'https://instagram.com/Fruzi_Coin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png' },
+                { id: 'ig', name: 'Instagram', link: 'https://instagram.com/FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png' },
                 { id: 'tw', name: 'Twitter (X)', link: 'https://twitter.com/FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png' }
             ]
         };
@@ -226,19 +226,19 @@
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const tg = window.Telegram.WebApp;
         tg.expand();
-        const user = tg.initDataUnsafe.user || { id: 777, first_name: "Test" };
+        const user = tg.initDataUnsafe.user || { id: 777, first_name: "Test User" };
         const startParam = tg.initDataUnsafe.start_param;
 
         let state = { balance: 0, energy: 1000, energy_max: 1000, multitap: 1, energy_limit: 1, has_bot: false, completedTasks: {}, lastDaily: null };
 
         async function init() {
             try {
-                // Referal narxini ko'rsatish
-                document.getElementById('refRewardText').innerText = `Har bir do'st uchun +${CONFIG.prices.referral.toLocaleString()} coin`;
+                // Referal narxini ko'rsatish (English)
+                document.getElementById('refRewardText').innerText = `Get +${CONFIG.prices.referral.toLocaleString()} coins per friend`;
 
                 let { data: u, error } = await sb.from('users').select('*').eq('id', user.id).single();
                 
-                // YANGI USER KELDI
+                // YANGI USER
                 if (error && error.code === 'PGRST116') {
                     let refId = (startParam && startParam.startsWith('ref_')) ? parseInt(startParam.split('_')[1]) : null;
                     let startBal = 0;
@@ -263,12 +263,17 @@
                     state = { balance: u.balance, energy: u.energy, energy_max: u.energy_max, multitap: u.multitap_level, energy_limit: u.energy_limit_level, has_bot: u.has_auto_bot, completedTasks: u.completed_tasks || {}, lastDaily: u.last_daily_claim };
                     let diff = Math.floor((Date.now() - new Date(u.last_active).getTime())/1000);
                     state.energy = Math.min(state.energy_max, state.energy + diff);
-                    if(state.has_bot && diff > 60) { state.balance += diff; alert(`🤖 Auto Bot ishladi: +${diff.toLocaleString()} coin!`); }
+                    // Auto bot alert (English)
+                    if(state.has_bot && diff > 60) { state.balance += diff; alert(`🤖 Auto Bot mined: +${diff.toLocaleString()} coins!`); }
                 }
                 updateUI(); renderTasks(); checkLeague(); 
                 document.getElementById('loadingScreen').style.display = 'none'; document.getElementById('gameContainer').style.display = 'block';
                 setInterval(save, 2000);
-            } catch (e) { document.getElementById('errorText').innerText = "Internet xatosi!"; document.getElementById('errorText').style.display = 'block'; }
+            } catch (e) { 
+                // Error message (English)
+                document.getElementById('errorText').innerText = "Connection Error: " + e.message; 
+                document.getElementById('errorText').style.display = 'block'; 
+            }
         }
 
         async function save() { await sb.from('users').upsert({ id: user.id, balance: state.balance, energy: state.energy, energy_max: state.energy_max, multitap_level: state.multitap, energy_limit_level: state.energy_limit, has_auto_bot: state.has_bot, completed_tasks: state.completedTasks, last_active: new Date().toISOString() }); }
@@ -281,12 +286,11 @@
             else { el.classList.add('diamond'); name.innerText = "Diamond"; name.style.color = "#00ffff"; }
         }
 
-        // --- DO'STLARNI KO'RSATISH FUNKSIYASI ---
+        // --- DO'STLARNI KO'RSATISH (Leaderboard style - English) ---
         async function loadFriends() { 
             let list = document.getElementById('friendsList'); 
-            list.innerHTML = '<div style="text-align:center; color:#666">Yuklanmoqda...</div>'; 
+            list.innerHTML = '<div style="text-align:center; color:#666">Loading...</div>'; 
             
-            // Bazadan meni kim invite qilgan bo'lsa, o'shalarni topish
             let { data } = await sb.from('users').select('first_name, balance').eq('invited_by', user.id); 
             
             list.innerHTML = ''; 
@@ -302,11 +306,36 @@
                     </div>`;
                 });
             } else { 
-                list.innerHTML = '<div style="text-align:center;padding:20px;color:#666">Hali hech kim yo\'q</div>'; 
+                list.innerHTML = '<div style="text-align:center;padding:20px;color:#666">No friends yet</div>'; 
             }
         }
 
-        // --- TASKS (15s TIMER) ---
+        // --- TOP REYTING (Leaderboard - TUZATILDI - English) ---
+        async function loadTop() { 
+            let list = document.getElementById('leaderboardList'); 
+            list.innerHTML = '<div style="text-align:center; color:#666">Loading...</div>'; 
+            
+            // Bazadan eng ko'p 10 ta odamni olish
+            let { data } = await sb.from('users').select('first_name, balance').order('balance', {ascending:false}).limit(10); 
+            
+            list.innerHTML = ''; 
+            if(data && data.length > 0) {
+                data.forEach((p, i) => {
+                    list.innerHTML += `
+                    <div class="list-item" style="height:50px">
+                        <div class="item-left">
+                            <b style="color:#666; width:30px">#${i+1}</b>
+                            <span class="item-title">${p.first_name}</span>
+                        </div>
+                        <span style="color:var(--gold); font-weight:bold">${p.balance.toLocaleString()}</span>
+                    </div>`;
+                });
+            } else {
+                list.innerHTML = '<div style="text-align:center; color:#666">No data yet</div>';
+            }
+        }
+
+        // --- TASKS (15s TIMER - English) ---
         function renderTasks() {
             const list = document.getElementById('tasksList'); list.innerHTML = '';
             CONFIG.tasks.forEach(t => {
@@ -335,10 +364,10 @@
             window.open(task.link, '_blank');
             btn.disabled = true;
             let timeLeft = 15;
-            btn.innerText = `Kuting ${timeLeft}s`;
+            btn.innerText = `Wait ${timeLeft}s`;
             let timer = setInterval(() => {
                 timeLeft--;
-                btn.innerText = `Kuting ${timeLeft}s`;
+                btn.innerText = `Wait ${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     btn.innerText = "Claim";
@@ -382,7 +411,9 @@
 
         window.openPage = function(id, btn) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); btn.classList.add('active'); if(id === 'topPage') loadTop(); if(id === 'friendsPage') loadFriends(); }
         
-        document.getElementById('inviteBtn').addEventListener('click', () => { navigator.clipboard.writeText(`https://t.me/${CONFIG.botUserName}?start=ref_${user.id}`); alert("Link nusxalandi! Do'stlarga yuboring."); });
+        // Invite button alert (English)
+        document.getElementById('inviteBtn').addEventListener('click', () => { navigator.clipboard.writeText(`https://t.me/${CONFIG.botUserName}?start=ref_${user.id}`); alert("Link copied! Share with friends."); });
+        
         document.getElementById('buyBotBtn').addEventListener('click', () => { if(state.balance >= CONFIG.prices.bot && !state.has_bot) { state.balance -= CONFIG.prices.bot; state.has_bot = true; updateUI(); save(); } });
         document.getElementById('buyMultiBtn').addEventListener('click', () => { let p = state.multitap * CONFIG.prices.multitapBase; if(state.balance >= p) { state.balance -= p; state.multitap++; updateUI(); save(); } });
         document.getElementById('buyEnergyBtn').addEventListener('click', () => { let p = state.energy_limit * CONFIG.prices.energyBase; if(state.balance >= p) { state.balance -= p; state.energy_limit++; state.energy_max += 500; updateUI(); save(); } });
