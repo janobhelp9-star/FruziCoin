@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruzi Coin Official</title>
+    <title>Fruzi Coin Final</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* --- DIZAYN --- */
+        /* --- DIZAYN (Pixel Perfect) --- */
         :root { --gold: #ffd700; --bg: #000000; --card-bg: rgba(255, 255, 255, 0.08); --text: #ffffff; }
         body { 
             background: black; 
@@ -18,17 +18,17 @@
             height: 100vh; display: flex; flex-direction: column; 
         }
 
-        /* LOADING */
+        /* LOADING EKRAN */
         #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .loader { border: 3px solid #333; border-top: 3px solid var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* HEADER */
+        /* HEADER & SCORE */
         .header { text-align: center; margin-top: 20px; padding-bottom: 10px; }
         .league-badge { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #888; font-weight: 600; }
         #score { font-size: 52px; font-weight: 800; margin-top: 5px; text-shadow: 0 0 25px rgba(255,215,0,0.15); }
 
-        /* COIN */
+        /* COIN (TANGA) */
         .coin-wrapper { flex-grow: 1; display: flex; align-items: center; justify-content: center; width: 100%; position: relative; }
         .coin {
             width: 72vw; height: 72vw; max-width: 280px; max-height: 280px;
@@ -41,13 +41,13 @@
         .coin:active { transform: scale(0.95); }
         .coin-logo { font-size: 48px; font-weight: 900; font-family: serif; user-select: none; pointer-events: none; }
 
-        /* LEAGUES */
+        /* LEAGUE STYLES */
         .bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #8b4513); border-color: rgba(205,127,50,0.3); }
         .silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #7f8c8d); border-color: rgba(255,255,255,0.3); }
         .gold { background: radial-gradient(circle at 30% 30%, #ffd700, #ffaa00); border-color: rgba(255,215,0,0.3); box-shadow: 0 0 50px rgba(255,215,0,0.2); }
         .diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #0088ff); border-color: rgba(0,255,255,0.3); box-shadow: 0 0 50px rgba(0,255,255,0.2); }
 
-        /* LIST ITEMS */
+        /* LIST ITEMS (Tasklar va Do'stlar uchun) */
         .list-container { width: 100%; padding: 0 5px; box-sizing: border-box; }
         .list-item { 
             background: var(--card-bg); backdrop-filter: blur(10px);
@@ -66,7 +66,7 @@
         .item-title { font-weight: 700; font-size: 15px; color: #fff; margin-bottom: 3px; white-space: nowrap; }
         .item-desc { font-size: 11px; color: #888; }
 
-        /* BUTTONS */
+        /* TUGMALAR */
         .btn-action { 
             background: var(--gold); border: none; min-width: 90px; height: 38px; 
             border-radius: 10px; font-weight: 700; cursor: pointer; color: #000; font-size: 13px;
@@ -77,7 +77,7 @@
         .btn-action.claim-ready { background: #2ecc71; color: white; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* NAVIGATION */
+        /* NAVIGATSIYA */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; padding-bottom: 15px; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; width: 20%; transition: 0.2s; font-weight: 500; }
         .nav-item.active { color: var(--gold); transform: translateY(-3px); font-weight: 700; }
@@ -85,8 +85,6 @@
 
         .page { display: none; flex-direction: column; height: 100%; width: 100%; padding: 20px 20px 100px 20px; box-sizing: border-box; align-items: center; overflow-y: auto; }
         .page.active { display: flex; }
-        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; display:none; justify-content:center; align-items:center; backdrop-filter: blur(5px); }
-        .modal-content { background:#151515; padding:30px; border-radius:25px; text-align:center; width:80%; border:1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         .float-text { position: absolute; color: white; font-weight: 800; font-size: 32px; pointer-events: none; animation: floatUp 0.8s forwards; z-index: 999; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         @keyframes floatUp { to { transform: translateY(-100px) scale(1.1); opacity: 0; } }
     </style>
@@ -95,18 +93,8 @@
 
     <div id="loadingScreen">
         <div class="loader"></div>
-        <div style="color:#666; font-size:12px">Connecting...</div>
+        <div style="color:#666; font-size:12px">Fruzi Coin yuklanmoqda...</div>
         <div id="errorText" style="color:red; display:none; margin-top:10px; font-size:12px"></div>
-    </div>
-
-    <div class="modal" id="dailyModal">
-        <div class="modal-content">
-            <div style="font-size:60px; margin-bottom:15px">📅</div>
-            <h2 style="color:#fff; margin:0">Daily Reward</h2>
-            <p style="color:#888; margin: 10px 0 20px 0">You've got a bonus!</p>
-            <h1 style="color:var(--gold); font-size:40px; margin:0 0 20px 0">+5,000</h1>
-            <button class="btn-action" onclick="claimDaily()" style="width:100%">Claim</button>
-        </div>
     </div>
 
     <div id="gameContainer" style="display:none; height:100%">
@@ -137,7 +125,7 @@
                         <div class="item-icon-box" style="background:transparent; font-size:28px">🤖</div>
                         <div class="item-info">
                             <span class="item-title">Auto Bot</span>
-                            <span class="item-desc">Mines while offline</span>
+                            <span class="item-desc">Siz uxlaganda ishlaydi</span>
                         </div>
                     </div>
                     <button class="btn-action" id="buyBotBtn">1M</button>
@@ -167,7 +155,7 @@
 
         <div class="page" id="tasksPage">
             <h2 style="color:var(--gold); margin-bottom:5px">Tasks</h2>
-            <p style="color:#666; font-size:12px; margin-bottom:20px">Click START & Wait 15s to claim</p>
+            <p style="color:#666; font-size:12px; margin-bottom:20px">Bosing, 15s kuting va pulni oling</p>
             <div id="tasksList" class="list-container"></div>
         </div>
 
@@ -179,11 +167,11 @@
                 
                 <p style="color:#888; font-size:13px; margin:5px 0 15px 0" id="refRewardText">Get +50,000 coins</p>
                 
-                <button class="btn-action" style="width:100%; margin:0" id="inviteBtn">Copy Link 🔗</button>
+                <button class="btn-action" style="width:100%; margin:0" id="inviteBtn">Linkdan nusxa olish 🔗</button>
             </div>
             
             <div class="list-container">
-                <div style="font-size:12px; color:#666; margin-bottom:10px; padding-left:5px">YOUR FRIENDS</div>
+                <div style="font-size:12px; color:#666; margin-bottom:10px; padding-left:5px">SIZNING DO'STLARINGIZ:</div>
                 <div id="friendsList"></div>
             </div>
         </div>
@@ -191,7 +179,7 @@
         <div class="page" id="topPage">
             <h2 style="color:var(--gold); margin-bottom:20px">Leaderboard</h2>
             <div id="leaderboardList" class="list-container">
-                <div style="text-align:center; color:#666">Loading...</div>
+                <div style="text-align:center; color:#666">Yuklanmoqda...</div>
             </div>
         </div>
 
@@ -206,24 +194,27 @@
 
     <script>
         // ==========================================
-        // ⚙️ BOSHQARUV (CONFIG) - TO'LIQ SOZLANGAN
+        // ⚙️ SOZLAMALAR (CONFIG)
         // ==========================================
         const CONFIG = {
-            botUserName: 'Fruzicoinbot', // <-- BOT USERNAME (TO'G'RI)
+            botUserName: 'Fruzicoinbot', // <-- BOT USERNAME (Fruzicoinbot)
             
             prices: {
-                bot: 500000,      // 500K
+                bot: 500000,      // 05 Million
                 multitapBase: 500, 
                 energyBase: 500,   
-                taskReward: 50000, // Vazifa: 50K
-                referral: 50000    // Referal: 50K
+                taskReward: 50000, 
+                referral: 50000    // <-- 50K REFERAL
             },
 
-            // RANGLI VA IYSHLAYDIGAN LOGOLAR
+            // LOGOLAR (TIKTOK YANGILANDI)
             tasks: [
                 { id: 'tg', name: 'Telegram', link: 'https://t.me/FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png' },
                 { id: 'yt', name: 'YouTube', link: 'https://youtube.com/@FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png' },
-                { id: 'tt', name: 'TikTok', link: 'https://tiktok.com/@FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Ionicons_logo-tiktok.svg/1024px-Ionicons_logo-tiktok.svg.png' },
+                
+                // YANGI TIKTOK RASM
+                { id: 'tt', name: 'TikTok', link: 'https://tiktok.com/@FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/1024px-TikTok_logo.svg.png' },
+                
                 { id: 'ig', name: 'Instagram', link: 'https://instagram.com/Fruzi_Coin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png' },
                 { id: 'tw', name: 'Twitter (X)', link: 'https://twitter.com/FruziCoin', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/600px-X_logo_2023.svg.png' }
             ]
@@ -242,17 +233,17 @@
 
         async function init() {
             try {
-                // Referal textni yangilash
-                document.getElementById('refRewardText').innerText = `Get +${CONFIG.prices.referral.toLocaleString()} coins per friend`;
+                // Referal narxini ko'rsatish
+                document.getElementById('refRewardText').innerText = `Har bir do'st uchun +${CONFIG.prices.referral.toLocaleString()} coin`;
 
                 let { data: u, error } = await sb.from('users').select('*').eq('id', user.id).single();
                 
+                // YANGI USER KELDI
                 if (error && error.code === 'PGRST116') {
-                    // Yangi User
                     let refId = (startParam && startParam.startsWith('ref_')) ? parseInt(startParam.split('_')[1]) : null;
-                    let startBal = refId ? CONFIG.prices.referral : 0;
+                    let startBal = 0;
                     
-                    // Userni yaratish
+                    // 1. Yangi userni bazaga qo'shish
                     await sb.from('users').insert([{ 
                         id: user.id, 
                         username: user.username, 
@@ -261,32 +252,26 @@
                         invited_by: refId 
                     }]);
                     
-                    // Referal bonusi (Agar refId bo'lsa)
+                    // 2. Taklif qilgan odamga pul berish
                     if(refId && refId !== user.id) {
                         await sb.rpc('increment_balance', { user_id: refId, amount: CONFIG.prices.referral });
                     }
                     
                     state.balance = startBal;
                 } else if (u) {
-                    // Eski User
+                    // ESKI USER
                     state = { balance: u.balance, energy: u.energy, energy_max: u.energy_max, multitap: u.multitap_level, energy_limit: u.energy_limit_level, has_bot: u.has_auto_bot, completedTasks: u.completed_tasks || {}, lastDaily: u.last_daily_claim };
                     let diff = Math.floor((Date.now() - new Date(u.last_active).getTime())/1000);
                     state.energy = Math.min(state.energy_max, state.energy + diff);
-                    if(state.has_bot && diff > 60) { state.balance += diff; alert(`🤖 Auto Bot mined +${diff.toLocaleString()} coins!`); }
+                    if(state.has_bot && diff > 60) { state.balance += diff; alert(`🤖 Auto Bot ishladi: +${diff.toLocaleString()} coin!`); }
                 }
-                updateUI(); renderTasks(); checkLeague(); checkDaily();
+                updateUI(); renderTasks(); checkLeague(); 
                 document.getElementById('loadingScreen').style.display = 'none'; document.getElementById('gameContainer').style.display = 'block';
                 setInterval(save, 2000);
-            } catch (e) { document.getElementById('errorText').innerText = "Xato: " + e.message; document.getElementById('errorText').style.display = 'block'; }
+            } catch (e) { document.getElementById('errorText').innerText = "Internet xatosi!"; document.getElementById('errorText').style.display = 'block'; }
         }
 
-        async function save() { await sb.from('users').upsert({ id: user.id, balance: state.balance, energy: state.energy, energy_max: state.energy_max, multitap_level: state.multitap, energy_limit_level: state.energy_limit, has_auto_bot: state.has_bot, completed_tasks: state.completedTasks, last_daily_claim: state.lastDaily, last_active: new Date().toISOString() }); }
-
-        function checkDaily() {
-            let now = new Date(); let last = state.lastDaily ? new Date(state.lastDaily) : new Date(0);
-            if ((now - last) / (1000 * 60 * 60) >= 24) document.getElementById('dailyModal').style.display = 'flex';
-        }
-        function claimDaily() { state.balance += 5000; state.lastDaily = new Date().toISOString(); document.getElementById('dailyModal').style.display = 'none'; updateUI(); save(); }
+        async function save() { await sb.from('users').upsert({ id: user.id, balance: state.balance, energy: state.energy, energy_max: state.energy_max, multitap_level: state.multitap, energy_limit_level: state.energy_limit, has_auto_bot: state.has_bot, completed_tasks: state.completedTasks, last_active: new Date().toISOString() }); }
 
         function checkLeague() {
             let el = document.getElementById('coinBtn'), name = document.getElementById('leagueName'); el.classList.remove('bronze', 'silver', 'gold', 'diamond');
@@ -296,7 +281,32 @@
             else { el.classList.add('diamond'); name.innerText = "Diamond"; name.style.color = "#00ffff"; }
         }
 
-        // --- 15 SONYALI HIMOYALI TASKS ---
+        // --- DO'STLARNI KO'RSATISH FUNKSIYASI ---
+        async function loadFriends() { 
+            let list = document.getElementById('friendsList'); 
+            list.innerHTML = '<div style="text-align:center; color:#666">Yuklanmoqda...</div>'; 
+            
+            // Bazadan meni kim invite qilgan bo'lsa, o'shalarni topish
+            let { data } = await sb.from('users').select('first_name, balance').eq('invited_by', user.id); 
+            
+            list.innerHTML = ''; 
+            if(data && data.length > 0) {
+                data.forEach(f => {
+                    list.innerHTML += `
+                    <div class="list-item" style="height:50px">
+                        <div class="item-left">
+                            <span style="font-size:20px">👤</span>
+                            <span class="item-title">${f.first_name}</span>
+                        </div>
+                        <span style="color:var(--gold); font-weight:bold">+${CONFIG.prices.referral/1000}k</span>
+                    </div>`;
+                });
+            } else { 
+                list.innerHTML = '<div style="text-align:center;padding:20px;color:#666">Hali hech kim yo\'q</div>'; 
+            }
+        }
+
+        // --- TASKS (15s TIMER) ---
         function renderTasks() {
             const list = document.getElementById('tasksList'); list.innerHTML = '';
             CONFIG.tasks.forEach(t => {
@@ -325,10 +335,10 @@
             window.open(task.link, '_blank');
             btn.disabled = true;
             let timeLeft = 15;
-            btn.innerText = `Wait ${timeLeft}s`;
+            btn.innerText = `Kuting ${timeLeft}s`;
             let timer = setInterval(() => {
                 timeLeft--;
-                btn.innerText = `Wait ${timeLeft}s`;
+                btn.innerText = `Kuting ${timeLeft}s`;
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     btn.innerText = "Claim";
@@ -372,22 +382,7 @@
 
         window.openPage = function(id, btn) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); btn.classList.add('active'); if(id === 'topPage') loadTop(); if(id === 'friendsPage') loadFriends(); }
         
-        async function loadFriends() { 
-            let list = document.getElementById('friendsList'); list.innerHTML = '<div style="text-align:center; color:#666">Loading...</div>'; 
-            let { data } = await sb.from('users').select('first_name, balance').eq('invited_by', user.id); 
-            list.innerHTML = ''; 
-            if(data && data.length) data.forEach(f => list.innerHTML += `<div class="list-item" style="height:50px"><div class="item-left"><span style="font-size:20px">👤</span><span class="item-title">${f.first_name}</span></div><span style="color:var(--gold); font-weight:bold">${f.balance.toLocaleString()}</span></div>`); 
-            else list.innerHTML = '<div style="text-align:center;padding:20px;color:#666">No friends yet</div>'; 
-        }
-        
-        async function loadTop() { 
-            let list = document.getElementById('leaderboardList'); list.innerHTML = '<div style="text-align:center; color:#666">Loading...</div>'; 
-            let { data } = await sb.from('users').select('first_name, balance').order('balance', {ascending:false}).limit(10); 
-            list.innerHTML = ''; 
-            if(data) data.forEach((p, i) => list.innerHTML += `<div class="list-item" style="height:50px"><div class="item-left"><b style="color:#666; width:20px">#${i+1}</b><span class="item-title">${p.first_name}</span></div><span style="color:var(--gold); font-weight:bold">${p.balance.toLocaleString()}</span></div>`); 
-        }
-        
-        document.getElementById('inviteBtn').addEventListener('click', () => { navigator.clipboard.writeText(`https://t.me/${CONFIG.botUserName}?start=ref_${user.id}`); alert("Invite Link Copied!"); });
+        document.getElementById('inviteBtn').addEventListener('click', () => { navigator.clipboard.writeText(`https://t.me/${CONFIG.botUserName}?start=ref_${user.id}`); alert("Link nusxalandi! Do'stlarga yuboring."); });
         document.getElementById('buyBotBtn').addEventListener('click', () => { if(state.balance >= CONFIG.prices.bot && !state.has_bot) { state.balance -= CONFIG.prices.bot; state.has_bot = true; updateUI(); save(); } });
         document.getElementById('buyMultiBtn').addEventListener('click', () => { let p = state.multitap * CONFIG.prices.multitapBase; if(state.balance >= p) { state.balance -= p; state.multitap++; updateUI(); save(); } });
         document.getElementById('buyEnergyBtn').addEventListener('click', () => { let p = state.energy_limit * CONFIG.prices.energyBase; if(state.balance >= p) { state.balance -= p; state.energy_limit++; state.energy_max += 500; updateUI(); save(); } });
@@ -395,4 +390,4 @@
         setInterval(() => { if(state.energy < state.energy_max) { state.energy++; updateUI(); } }, 1000); init();
     </script>
 </body>
-</html>
+    </html>
